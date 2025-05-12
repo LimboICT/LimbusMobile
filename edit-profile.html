@@ -188,33 +188,33 @@
     <main class="edit-profile-content">
       <div class="profile-pic-section">
         <div class="profile-pic-container">
-          <img id="profile-pic" class="profile-pic" src="default-profile.jpg" alt="Profile Picture">
+          <img id="profile-pic" class="profile-pic" src="default-profile.jpg" alt="Profile Picture" />
           <div class="change-pic-btn" onclick="document.getElementById('profile-upload').click()">
             <i class="fas fa-camera"></i>
           </div>
-          <input type="file" id="profile-upload" accept="image/*" style="display: none;">
+          <input type="file" id="profile-upload" accept="image/*" style="display: none;" />
         </div>
       </div>
 
       <div class="profile-form">
         <div class="form-group">
           <label class="form-label">Full Name</label>
-          <input type="text" id="full-name" class="form-input" placeholder="Enter your full name">
+          <input type="text" id="full-name" class="form-input" placeholder="Enter your full name" />
         </div>
 
         <div class="form-group">
           <label class="form-label">Email Address</label>
-          <input type="email" id="email" class="form-input" placeholder="Enter your email" disabled>
+          <input type="email" id="email" class="form-input" disabled />
         </div>
 
         <div class="form-group">
           <label class="form-label">Phone Number</label>
-          <input type="tel" id="phone" class="form-input" placeholder="Enter your phone number">
+          <input type="tel" id="phone" class="form-input" placeholder="Enter your phone number" />
         </div>
 
         <div class="form-group">
           <label class="form-label">Birthday</label>
-          <input type="date" id="birthday" class="form-input">
+          <input type="date" id="birthday" class="form-input" />
         </div>
 
         <button class="save-btn" id="save-btn">Save Changes</button>
@@ -223,7 +223,7 @@
   </div>
 
   <nav class="bottom-nav">
-    <a href="Home.html" class="nav-item">
+    <a href="index.html" class="nav-item">
       <i class="fas fa-home"></i>
       <span>Home</span>
     </a>
@@ -244,7 +244,7 @@
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
     import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-    import { getFirestore, doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+    import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
     import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
 
     const firebaseConfig = {
@@ -266,17 +266,17 @@
 
     function loadProfileData(user) {
       currentUser = user;
-      
+
       document.getElementById('full-name').value = user.displayName || '';
       document.getElementById('email').value = user.email || '';
-      
+
       const userRef = doc(db, "users", user.uid);
       getDoc(userRef).then((docSnap) => {
         if (docSnap.exists()) {
           profileData = docSnap.data();
           document.getElementById('phone').value = profileData.phone || '';
           document.getElementById('birthday').value = profileData.birthday || '';
-          
+
           if (profileData.photoURL) {
             document.getElementById('profile-pic').src = profileData.photoURL;
           } else if (user.photoURL) {
@@ -302,7 +302,7 @@
       const phone = document.getElementById('phone').value.trim();
       const birthday = document.getElementById('birthday').value;
       const fileInput = document.getElementById('profile-upload');
-      
+
       if (!fullName) {
         alert('Please enter your full name');
         return;
@@ -310,7 +310,7 @@
 
       try {
         let photoURL = profileData.photoURL || currentUser.photoURL;
-        
+
         if (fileInput.files[0]) {
           const storageRef = ref(storage, `profile_pics/${currentUser.uid}`);
           await uploadBytes(storageRef, fileInput.files[0]);
@@ -318,17 +318,17 @@
         }
 
         const userRef = doc(db, "users", currentUser.uid);
-        await updateDoc(userRef, {
+        await setDoc(userRef, {
           displayName: fullName,
           phone,
           birthday,
           photoURL,
           lastUpdated: new Date()
-        });
+        }, { merge: true });
 
         alert('Profile updated successfully!');
         window.location.href = 'account.html';
-        
+
       } catch (error) {
         console.error("Error updating profile:", error);
         alert('Failed to update profile. Please try again.');
