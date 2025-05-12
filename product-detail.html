@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Product | Drift Beyond Style</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header>
+    <a href="products.html" class="back-btn"><i class="fas fa-arrow-left"></i></a>
+    <h1>Product Details</h1>
+    <a href="cart.html"><i class="fas fa-shopping-cart"></i><span class="cart-count">0</span></a>
+  </header>
+
+  <main>
+    <div class="product-detail">
+      <img id="product-image" src="" alt="Product Image">
+      <h2 id="product-name">Loading...</h2>
+      <p id="product-price">₱---</p>
+      <p id="product-desc">Description loading...</p>
+      
+      <div class="quantity-selector">
+        <button onclick="updateQuantity(-1)">-</button>
+        <span id="quantity">1</span>
+        <button onclick="updateQuantity(1)">+</button>
+      </div>
+      
+      <button class="add-to-cart-btn" onclick="addToCart()">Add to Cart</button>
+    </div>
+  </main>
+
+  <script type="module">
+    import { getProductById } from './js/products.js';
+    import { addToCart } from './js/cart.js';
+    
+    const urlParams = new URLSearchParams(window.location.search);
+    const productId = urlParams.get('id');
+    
+    async function loadProduct() {
+      const product = await getProductById(productId);
+      document.getElementById('product-name').textContent = product.name;
+      document.getElementById('product-price').textContent = `₱${product.price}`;
+      document.getElementById('product-desc').textContent = product.description;
+      document.getElementById('product-image').src = product.imageUrl;
+    }
+    
+    let quantity = 1;
+    function updateQuantity(change) {
+      quantity = Math.max(1, quantity + change);
+      document.getElementById('quantity').textContent = quantity;
+    }
+    
+    function addToCart() {
+      addToCart(productId, quantity);
+      alert('Added to cart!');
+    }
+    
+    loadProduct();
+  </script>
+</body>
+</html>
