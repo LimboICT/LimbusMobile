@@ -1,346 +1,406 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Limbus - Cart</title>
-    <link rel="icon" href="limbus.png" type="image/png">
-    <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Limbus - Cart</title>
+  <link rel="icon" href="limbus.png" type="image/png">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
 
-        body {
-            font-family: 'Segoe UI', sans-serif;
-            background-color: #f0f0f0;
-            padding-top: 60px;
-            padding-bottom: 80px;
-        }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      background-color: #f8f8f8;
+      color: #333;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
 
-        .navbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background-color: black;
-            padding: 12px 20px;
-            color: white;
-            position: fixed;
-            top: 0;
-            width: 100%;
-            z-index: 1000;
-        }
+    .app-container {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+      padding-bottom: 70px;
+    }
 
-        .logo {
-            font-size: 20px;
-            font-weight: bold;
-        }
+    .app-header {
+      background-color: #000;
+      color: white;
+      padding: 15px;
+      text-align: center;
+      position: relative;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      z-index: 10;
+    }
 
-        .cart-container {
-            width: 100%;
-            max-width: 500px;
-            margin: 0 auto;
-            padding: 15px;
-        }
+    .back-btn {
+      position: absolute;
+      left: 15px;
+      top: 15px;
+      color: white;
+      text-decoration: none;
+      font-size: 20px;
+    }
 
-        .cart-item {
-            background-color: #fff;
-            border-radius: 15px;
-            padding: 15px;
-            margin-bottom: 15px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
+    .app-title {
+      font-size: 20px;
+      font-weight: 600;
+    }
 
-        .cart-item img {
-            width: 100%;
-            border-radius: 10px;
-        }
+    .cart-content {
+      flex: 1;
+      padding: 15px;
+    }
 
-        .cart-item-name {
-            font-size: 18px;
-            font-weight: 600;
-        }
+    .empty-cart {
+      text-align: center;
+      margin-top: 50px;
+    }
 
-        .cart-item-price {
-            font-size: 16px;
-            color: #333;
-        }
+    .empty-cart i {
+      font-size: 50px;
+      color: #ccc;
+      margin-bottom: 20px;
+    }
 
-        .cart-item-info div {
-            font-size: 14px;
-            margin-top: 2px;
-        }
+    .empty-cart h2 {
+      font-size: 22px;
+      color: #666;
+      margin-bottom: 15px;
+    }
 
-        .remove-item-btn, .edit-item-btn {
-            padding: 10px;
-            border: none;
-            border-radius: 10px;
-            width: 100%;
-            margin-top: 8px;
-            font-weight: bold;
-        }
+    .empty-cart p {
+      color: #999;
+      margin-bottom: 25px;
+    }
 
-        .remove-item-btn {
-            background-color: #ff4d4d;
-            color: white;
-        }
+    .shop-btn {
+      display: inline-block;
+      padding: 12px 30px;
+      background-color: #000;
+      color: white;
+      text-decoration: none;
+      border-radius: 25px;
+      font-weight: 500;
+    }
 
-        .edit-item-btn {
-            background-color: #333;
-            color: white;
-        }
+    .cart-items {
+      margin-bottom: 15px;
+    }
 
-        .total-price {
-            text-align: right;
-            font-size: 18px;
-            font-weight: bold;
-            margin-top: 20px;
-            margin-bottom: 10px;
-        }
+    .cart-item {
+      background: white;
+      border-radius: 12px;
+      margin-bottom: 15px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      overflow: hidden;
+    }
 
-        .empty-cart-message {
-            text-align: center;
-            font-size: 18px;
-            color: #777;
-            margin-top: 30px;
-        }
+    .item-header {
+      display: flex;
+      padding: 15px;
+      border-bottom: 1px solid #f0f0f0;
+    }
 
-        .bottom-nav {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            background: #fff;
-            border-top: 1px solid #ddd;
-            padding: 15px;
-            display: flex;
-            justify-content: space-around;
-            box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
-        }
+    .item-image {
+      width: 80px;
+      height: 80px;
+      object-fit: cover;
+      border-radius: 8px;
+      margin-right: 15px;
+    }
 
-        .checkout-btn {
-            flex: 1;
-            text-align: center;
-            padding: 14px;
-            font-size: 16px;
-            font-weight: bold;
-            border-radius: 10px;
-            margin: 0 5px;
-            text-decoration: none;
-            transition: 0.3s;
-        }
+    .item-details {
+      flex: 1;
+    }
 
-        .checkout-btn.enabled {
-            background-color: black;
-            color: white;
-        }
+    .item-name {
+      font-weight: 600;
+      margin-bottom: 5px;
+    }
 
-        .checkout-btn.disabled {
-            background-color: #ccc;
-            color: #666;
-            pointer-events: none;
-        }
+    .item-price {
+      color: #000;
+      font-weight: 500;
+    }
 
-        .modal-backdrop {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.6);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 9999;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.3s ease;
-        }
+    .item-options {
+      color: #666;
+      font-size: 14px;
+      margin-top: 5px;
+    }
 
-        .modal-backdrop.show {
-            opacity: 1;
-            pointer-events: auto;
-        }
+    .item-footer {
+      display: flex;
+      justify-content: space-between;
+      padding: 15px;
+      align-items: center;
+    }
 
-        .modal {
-            background: white;
-            border-radius: 12px;
-            padding: 25px 20px;
-            width: 90%;
-            max-width: 350px;
-            text-align: center;
-        }
+    .quantity-control {
+      display: flex;
+      align-items: center;
+    }
 
-        .modal p {
-            font-size: 16px;
-            margin-bottom: 20px;
-        }
+    .quantity-btn {
+      width: 30px;
+      height: 30px;
+      background-color: #f0f0f0;
+      border: none;
+      border-radius: 50%;
+      font-size: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
 
-        .modal button {
-            padding: 10px 20px;
-            border: none;
-            border-radius: 8px;
-            margin: 5px;
-            font-size: 15px;
-            font-weight: bold;
-        }
+    .quantity-input {
+      width: 40px;
+      text-align: center;
+      margin: 0 10px;
+      font-size: 16px;
+      border: none;
+      background: transparent;
+    }
 
-        .yes-btn {
-            background-color: red;
-            color: white;
-        }
+    .remove-btn {
+      color: #ff3b30;
+      background: none;
+      border: none;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+    }
 
-        .no-btn {
-            background-color: #ccc;
-            color: black;
-        }
+    .summary {
+      background: white;
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      margin-bottom: 15px;
+    }
 
-        @media (min-width: 600px) {
-            body {
-                padding-top: 70px;
-            }
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
 
-            .cart-container {
-                padding: 20px;
-            }
+    .summary-label {
+      color: #666;
+    }
 
-            .checkout-btn {
-                font-size: 18px;
-            }
-        }
-    </style>
+    .summary-value {
+      font-weight: 500;
+    }
+
+    .total-row {
+      border-top: 1px solid #f0f0f0;
+      padding-top: 15px;
+      margin-top: 15px;
+      font-weight: 600;
+      font-size: 18px;
+    }
+
+    .checkout-btn {
+      display: block;
+      width: 100%;
+      padding: 16px;
+      background-color: #000;
+      color: white;
+      border: none;
+      border-radius: 12px;
+      font-size: 18px;
+      font-weight: 500;
+      cursor: pointer;
+      margin-top: 15px;
+    }
+
+    .checkout-btn:disabled {
+      background-color: #ccc;
+      cursor: not-allowed;
+    }
+
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background-color: #000;
+      display: flex;
+      justify-content: space-around;
+      padding: 10px 0;
+      box-shadow: 0 -2px 5px rgba(0,0,0,0.1);
+      z-index: 100;
+      border-top: 1px solid #333;
+    }
+
+    .nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      color: white;
+      text-decoration: none;
+      font-size: 12px;
+      padding: 5px 10px;
+      opacity: 0.7;
+      transition: opacity 0.2s;
+    }
+
+    .nav-item i {
+      font-size: 22px;
+      margin-bottom: 3px;
+    }
+
+    .nav-item.active {
+      opacity: 1;
+    }
+  </style>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
+  <div class="app-container">
+    <header class="app-header">
+      <a href="Home.html" class="back-btn">←</a>
+      <div class="app-title">Your Cart</div>
+    </header>
 
-    <div class="navbar">
-        <div class="logo">Limbus</div>
-    </div>
+    <main class="cart-content">
+      <div id="cart-items-container">
+        <!-- Cart items will be inserted here -->
+      </div>
 
-    <div class="cart-container">
-        <div id="cart-items"></div>
-        <div class="empty-cart-message" id="empty-message" style="display: none;">Your cart is empty.</div>
-        <div class="total-price">Total: ₱<span id="total-price">0.00</span></div>
-    </div>
+      <div id="empty-cart-view" class="empty-cart" style="display: none;">
+        <i class="fas fa-shopping-cart"></i>
+        <h2>Your cart is empty</h2>
+        <p>Browse our collection and add some items</p>
+        <a href="Home.html" class="shop-btn">Shop Now</a>
+      </div>
 
-    <div class="bottom-nav">
-        <a href="index.html" class="checkout-btn enabled">Shop More</a>
-        <a href="checkout.html" id="checkout-btn" class="checkout-btn disabled">Checkout</a>
-    </div>
-
-    <div class="modal-backdrop" id="modal">
-        <div class="modal">
-            <p>Are you sure you want to remove this item?</p>
-            <button class="yes-btn" onclick="confirmRemove()">Yes</button>
-            <button class="no-btn" onclick="closeModal()">No</button>
+      <div id="cart-summary" style="display: none;">
+        <div class="summary">
+          <div class="summary-row">
+            <span class="summary-label">Subtotal</span>
+            <span class="summary-value" id="subtotal">₱0.00</span>
+          </div>
+          <div class="summary-row">
+            <span class="summary-label">Shipping</span>
+            <span class="summary-value">Free</span>
+          </div>
+          <div class="summary-row total-row">
+            <span class="summary-label">Total</span>
+            <span class="summary-value" id="total-price">₱0.00</span>
+          </div>
         </div>
-    </div>
+        <button id="checkout-btn" class="checkout-btn" disabled>Checkout</button>
+      </div>
+    </main>
+  </div>
 
-    <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      document.addEventListener('gesturestart', function(e) {
-        e.preventDefault();
-      }); 
-        
-        const cart = JSON.parse(localStorage.getItem("cart")) || [];
-        let itemToRemoveIndex = null;
+  <nav class="bottom-nav">
+    <a href="index.html" class="nav-item">
+      <i class="fas fa-home"></i>
+      <span>Home</span>
+    </a>
+    <a href="cart.html" class="nav-item active">
+      <i class="fas fa-shopping-cart"></i>
+      <span>Cart</span>
+    </a>
+    <a href="Contact.html" class="nav-item">
+      <i class="fas fa-headset"></i>
+      <span>Contact</span>
+    </a>
+    <a href="account.html" class="nav-item">
+      <i class="fas fa-user"></i>
+      <span>Account</span>
+    </a>
+  </nav>
 
-        function updateCart() {
-            const cartItemsContainer = document.getElementById("cart-items");
-            const totalPriceElement = document.getElementById("total-price");
-            const emptyMessage = document.getElementById("empty-message");
-            const checkoutBtn = document.getElementById("checkout-btn");
+  <script>
+    let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
-            let totalPrice = 0;
-            cartItemsContainer.innerHTML = "";
+    function renderCart() {
+      const cartContainer = document.getElementById("cart-items-container");
+      const emptyView = document.getElementById("empty-cart-view");
+      const summaryView = document.getElementById("cart-summary");
+      const checkoutBtn = document.getElementById("checkout-btn");
 
-            if (cart.length === 0) {
-                emptyMessage.style.display = "block";
-                checkoutBtn.classList.remove("enabled");
-                checkoutBtn.classList.add("disabled");
-            } else {
-                emptyMessage.style.display = "none";
-                checkoutBtn.classList.remove("disabled");
-                checkoutBtn.classList.add("enabled");
-            }
+      cartContainer.innerHTML = "";
+      
+      if (cart.length === 0) {
+        emptyView.style.display = "block";
+        summaryView.style.display = "none";
+        checkoutBtn.disabled = true;
+        return;
+      }
 
-            cart.forEach((item, index) => {
-                totalPrice += parseFloat(item.price) * item.quantity;
-                const cartItemElement = document.createElement("div");
-                cartItemElement.classList.add("cart-item");
-                cartItemElement.setAttribute("id", `cart-item-${index}`);
-                cartItemElement.innerHTML = `
-                    <img src="${item.image}" alt="${item.name}">
-                    <div class="cart-item-info">
-                        <div class="cart-item-name">${item.name}</div>
-                        <div class="cart-item-price">₱${(item.price * item.quantity).toFixed(2)}</div>
-                        <div>Color: ${item.color || 'N/A'}</div>
-                        <div>Size: ${item.size || 'N/A'}</div>
-                        <div>Quantity: ${item.quantity}</div>
-                    </div>
-                    <button class="remove-item-btn" onclick="openModal(${index})">Remove</button>
-                    <button class="edit-item-btn" onclick="editItem(${index})">Edit</button>
-                `;
-                cartItemsContainer.appendChild(cartItemElement);
-            });
+      emptyView.style.display = "none";
+      summaryView.style.display = "block";
+      checkoutBtn.disabled = false;
 
-            animatePrice(totalPriceElement, parseFloat(totalPriceElement.textContent), totalPrice);
-        }
+      let subtotal = 0;
 
-        function animatePrice(element, start, end) {
-            const duration = 300;
-            const frameRate = 60;
-            const totalFrames = Math.round((duration / 1000) * frameRate);
-            let frame = 0;
-            const counter = setInterval(() => {
-                frame++;
-                const progress = frame / totalFrames;
-                const current = start + (end - start) * progress;
-                element.textContent = current.toFixed(2);
-                if (frame === totalFrames) {
-                    clearInterval(counter);
-                    element.textContent = end.toFixed(2);
-                }
-            }, duration / totalFrames);
-        }
+      cart.forEach((item, index) => {
+        const itemTotal = item.price * item.quantity;
+        subtotal += itemTotal;
 
-        function openModal(index) {
-            itemToRemoveIndex = index;
-            document.getElementById("modal").classList.add("show");
-        }
+        const itemElement = document.createElement("div");
+        itemElement.className = "cart-item";
+        itemElement.innerHTML = `
+          <div class="item-header">
+            <img src="${item.image}" alt="${item.name}" class="item-image">
+            <div class="item-details">
+              <div class="item-name">${item.name}</div>
+              <div class="item-price">₱${item.price.toFixed(2)}</div>
+              ${item.color ? `<div class="item-options">Color: ${item.color}</div>` : ''}
+              ${item.size ? `<div class="item-options">Size: ${item.size}</div>` : ''}
+            </div>
+          </div>
+          <div class="item-footer">
+            <div class="quantity-control">
+              <button class="quantity-btn" onclick="updateQuantity(${index}, -1)">−</button>
+              <input type="text" class="quantity-input" value="${item.quantity}" readonly>
+              <button class="quantity-btn" onclick="updateQuantity(${index}, 1)">+</button>
+            </div>
+            <button class="remove-btn" onclick="removeItem(${index})">Remove</button>
+          </div>
+        `;
+        cartContainer.appendChild(itemElement);
+      });
 
-        function closeModal() {
-            itemToRemoveIndex = null;
-            document.getElementById("modal").classList.remove("show");
-        }
+      document.getElementById("subtotal").textContent = `₱${subtotal.toFixed(2)}`;
+      document.getElementById("total-price").textContent = `₱${subtotal.toFixed(2)}`;
+    }
 
-        function confirmRemove() {
-            if (itemToRemoveIndex !== null) {
-                cart.splice(itemToRemoveIndex, 1);
-                localStorage.setItem("cart", JSON.stringify(cart));
-                updateCart();
-                closeModal();
-            }
-        }
+    function updateQuantity(index, change) {
+      const newQuantity = cart[index].quantity + change;
+      if (newQuantity < 1) return;
+      
+      cart[index].quantity = newQuantity;
+      localStorage.setItem("cart", JSON.stringify(cart));
+      renderCart();
+    }
 
-        function editItem(index) {
-            const item = cart[index];
-            const queryParams = new URLSearchParams({
-                edit: 'true',
-                index: index,
-                name: item.name,
-                price: item.price,
-                image: item.image,
-                hasColor: item.color ? 'true' : 'false',
-                hasSize: item.size ? 'true' : 'false'
-            });
-            window.location.href = `ProductPage.html?${queryParams.toString()}`;
-        }
+    function removeItem(index) {
+      cart.splice(index, 1);
+      localStorage.setItem("cart", JSON.stringify(cart));
+      renderCart();
+    }
 
-        window.onload = updateCart;
-    </script>
+    document.getElementById("checkout-btn").addEventListener("click", function() {
+      window.location.href = "checkout.html";
+    });
+
+    window.addEventListener("load", renderCart);
+  </script>
     
     <script>
     document.addEventListener('gesturestart', function (e) {
