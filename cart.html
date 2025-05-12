@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Your Cart | Drift Beyond Style</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header>
+    <a href="products.html" class="back-btn"><i class="fas fa-arrow-left"></i></a>
+    <h1>Your Cart</h1>
+    <div class="header-icons"></div>
+  </header>
+
+  <main>
+    <div id="cart-items">
+      <!-- Cart items loaded via JavaScript -->
+      <p class="empty-cart-msg">Your cart is empty</p>
+    </div>
+    
+    <div class="cart-summary">
+      <h3>Order Summary</h3>
+      <div class="summary-row">
+        <span>Subtotal</span>
+        <span id="subtotal">₱0</span>
+      </div>
+      <div class="summary-row">
+        <span>Shipping</span>
+        <span>₱50</span>
+      </div>
+      <div class="summary-row total">
+        <span>Total</span>
+        <span id="total">₱50</span>
+      </div>
+      <a href="checkout.html" class="checkout-btn">Proceed to Checkout</a>
+    </div>
+  </main>
+
+  <script type="module" src="js/cart.js"></script>
+</body>
+</html>
