@@ -90,7 +90,13 @@
 
     .user-email {
       color: #666;
-      margin-bottom: 15px;
+      margin-bottom: 5px;
+    }
+
+    .user-phone, .user-birthday {
+      color: #666;
+      font-size: 14px;
+      margin-bottom: 5px;
     }
 
     .account-section {
@@ -207,10 +213,12 @@
     <main class="account-content">
       <div class="profile-card">
         <div class="profile-pic" id="profile-pic">
-          <i class="fas fa-user"></i>
+          <i class="fas fa-user" id="default-profile-icon"></i>
         </div>
         <h1 class="user-name" id="user-name">Loading...</h1>
         <p class="user-email" id="user-email">user@example.com</p>
+        <p class="user-phone" id="user-phone"></p>
+        <p class="user-birthday" id="user-birthday"></p>
       </div>
 
       <div class="account-section">
@@ -223,15 +231,31 @@
           </div>
           <i class="fas fa-chevron-right account-item-arrow"></i>
         </a>
-      </div>
-
-      <div class="account-section">
-        <div class="section-title">Settings</div>
         <a href="edit-profile.html" class="account-item">
           <i class="fas fa-user-edit"></i>
           <div class="account-item-text">
             <div class="account-item-title">Edit Profile</div>
             <div class="account-item-desc">Update your personal information</div>
+          </div>
+          <i class="fas fa-chevron-right account-item-arrow"></i>
+        </a>
+      </div>
+
+      <div class="account-section">
+        <div class="section-title">Settings</div>
+        <a href="change-password.html" class="account-item">
+          <i class="fas fa-lock"></i>
+          <div class="account-item-text">
+            <div class="account-item-title">Change Password</div>
+            <div class="account-item-desc">Update your account password</div>
+          </div>
+          <i class="fas fa-chevron-right account-item-arrow"></i>
+        </a>
+        <a href="notifications.html" class="account-item">
+          <i class="fas fa-bell"></i>
+          <div class="account-item-text">
+            <div class="account-item-title">Notifications</div>
+            <div class="account-item-desc">Manage your notification preferences</div>
           </div>
           <i class="fas fa-chevron-right account-item-arrow"></i>
         </a>
@@ -260,9 +284,41 @@
     </a>
   </nav>
 
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+  <script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const profileData = JSON.parse(localStorage.getItem('profileData')) || {};
+
+    if (profileData.fullName) {
+      document.getElementById('user-name').textContent = profileData.fullName;
+    }
+    
+    if (profileData.email) {
+      document.getElementById('user-email').textContent = profileData.email;
+    }
+    
+    if (profileData.phone) {
+      document.getElementById('user-phone').textContent = profileData.phone;
+    } else {
+      document.getElementById('user-phone').style.display = 'none';
+    }
+    
+    if (profileData.birthday) {
+      const formattedDate = new Date(profileData.birthday).toLocaleDateString();
+      document.getElementById('user-birthday').textContent = `Birthday: ${formattedDate}`;
+    } else {
+      document.getElementById('user-birthday').style.display = 'none';
+    }
+    
+    if (profileData.profilePic && profileData.profilePic !== 'default-profile.jpg') {
+      document.getElementById('profile-pic').innerHTML = '';
+      const img = document.createElement('img');
+      img.src = profileData.profilePic;
+      img.style.width = '100%';
+      img.style.height = '100%';
+      img.style.borderRadius = '50%';
+      document.getElementById('profile-pic').appendChild(img);
+      document.getElementById('default-profile-icon').style.display = 'none';
+    }
 
     const firebaseConfig = {
       apiKey: "AIzaSyAnf_PNL0nJAzcAC-Tozk9ugt8UIykeIu0",
@@ -285,59 +341,23 @@
       }
     }
 
-    document.getElementById("logout-btn").addEventListener("click", () => {
+    document.getElementById('logout-btn').addEventListener('click', function() {
       signOut(auth).then(() => {
-        window.location.href = "index.html";
+        window.location.href = 'index.html';
       }).catch((error) => {
         console.error("Logout error:", error);
       });
     });
 
-    document.addEventListener('DOMContentLoaded', function() {
-      const profileData = JSON.parse(localStorage.getItem('profileData')) || {};
-      
-      if (profileData.fullName) {
-        document.getElementById('user-name').textContent = profileData.fullName;
-      }
-      
-      if (profileData.email) {
-        document.getElementById('user-email').textContent = profileData.email;
-      }
-      
-      if (profileData.phone) {
-        document.getElementById('user-phone').textContent = profileData.phone;
-      } else {
-        document.getElementById('user-phone').style.display = 'none';
-      }
-      
-      if (profileData.birthday) {
-        const formattedDate = new Date(profileData.birthday).toLocaleDateString();
-        document.getElementById('user-birthday').textContent = `Birthday: ${formattedDate}`;
-      } else {
-        document.getElementById('user-birthday').style.display = 'none';
-      }
-      
-      if (profileData.profilePic && profileData.profilePic !== 'default-profile.jpg') {
-        document.getElementById('profile-pic').innerHTML = '';
-        const img = document.createElement('img');
-        img.src = profileData.profilePic;
-        img.style.width = '100%';
-        img.style.height = '100%';
-        img.style.borderRadius = '50%';
-        document.getElementById('profile-pic').appendChild(img);
-        document.getElementById('default-profile-icon').style.display = 'none';
-      }
-    });
-
-    document.getElementById('logout-btn').addEventListener('click', function() {
-
     onAuthStateChanged(auth, (user) => {
       if (user) {
         loadUserProfile(user);
       } else {
-        window.location.href = "Login.html";
+        window.location.href = "Login.html"; 
       }
     });
-  </script>
+  });
+</script>
+
 </body>
 </html>
