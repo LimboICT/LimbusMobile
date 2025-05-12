@@ -44,8 +44,3 @@ document.getElementById("login-button").addEventListener("click", () => {
       alert("Error: " + error.message);
     });
 });
-
-document.addEventListener('DOMContentLoaded', function() {
-      document.addEventListener('gesturestart', function(e) {
-        e.preventDefault();
-      }); 
