@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Limbus - My Orders</title>
+  <link rel="icon" href="limbus.png" type="image/png">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      background-color: #f8f8f8;
+      color: #333;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .app-container {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+      padding-bottom: 70px;
+    }
+
+    .app-header {
+      background-color: #000;
+      color: white;
+      padding: 15px;
+      text-align: center;
+      position: relative;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      z-index: 10;
+    }
+
+    .back-btn {
+      position: absolute;
+      left: 15px;
+      top: 15px;
+      color: white;
+      text-decoration: none;
+      font-size: 20px;
+    }
+
+    .app-title {
+      font-size: 20px;
+      font-weight: 600;
+    }
+
+    .orders-content {
+      flex: 1;
+      padding: 20px;
+    }
+
+    .order-tabs {
+      display: flex;
+      border-bottom: 1px solid #e0e0e0;
+      margin-bottom: 15px;
+    }
+
+    .order-tab {
+      padding: 12px 20px;
+      font-weight: 500;
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+    }
+
+    .order-tab.active {
+      border-bottom: 2px solid #000;
+    }
+
+    .order-list {
+      display: none;
+    }
+
+    .order-list.active {
+      display: block;
+    }
+
+    .order-card {
+      background: white;
+      border-radius: 12px;
+      padding: 15px;
+      margin-bottom: 15px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+
+    .order-header {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 10px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid #f0f0f0;
+    }
+
+    .order-id {
+      font-weight: 600;
+    }
+
+    .order-date {
+      color: #666;
+      font-size: 14px;
+    }
+
+    .order-status {
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    .status-pending {
+      background-color: #FFF3CD;
+      color: #856404;
+    }
+
+    .status-processing {
+      background-color: #CCE5FF;
+      color: #004085;
+    }
+
+    .status-shipped {
+      background-color: #D4EDDA;
+      color: #155724;
+    }
+
+    .status-delivered {
+      background-color: #D1ECF1;
+      color: #0C5460;
+    }
+
+    .status-cancelled {
+      background-color: #F8D7DA;
+      color: #721C24;
+    }
+
+    .order-item {
+      display: flex;
+      margin-bottom: 10px;
+    }
+
+    .order-item-img {
+      width: 60px;
+      height: 60px;
+      object-fit: cover;
+      border-radius: 8px;
+      margin-right: 15px;
+    }
+
+    .order-item-details {
+      flex: 1;
+    }
+
+    .order-item-name {
+      font-weight: 500;
+      margin-bottom: 5px;
+    }
+
+    .order-item-price {
+      color: #666;
+      font-size: 14px;
+    }
+
+    .order-item-options {
+      color: #999;
+      font-size: 13px;
+      margin-top: 3px;
+    }
+
+    .order-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 15px;
+      padding-top: 15px;
+      border-top: 1px solid #f0f0f0;
+    }
+
+    .order-total {
+      font-weight: 600;
+    }
+
+    .order-actions {
+      display: flex;
+      gap: 10px;
+    }
+
+    .order-btn {
+      padding: 8px 15px;
+      border-radius: 20px;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+    }
+
+    .view-btn {
+      background-color: #000;
+      color: white;
+      border: none;
+    }
+
+    .cancel-btn {
+      background-color: transparent;
+      color: #ff3b30;
+      border: 1px solid #ff3b30;
+    }
+
+    .reorder-btn {
+      background-color: transparent;
+      color: #000;
+      border: 1px solid #000;
+    }
+
+    .empty-orders {
+      text-align: center;
+      padding: 40px 20px;
+    }
+
+    .empty-orders i {
+      font-size: 50px;
+      color: #ccc;
+      margin-bottom: 20px;
+    }
+
+    .empty-orders h3 {
+      font-size: 18px;
+      margin-bottom: 10px;
+    }
+
+    .empty-orders p {
+      color: #999;
+      margin-bottom: 20px;
+    }
+
+    .shop-btn {
+      display: inline-block;
+      padding: 12px 30px;
+      background-color: #000;
+      color: white;
+      text-decoration: none;
+      border-radius: 25px;
+      font-weight: 500;
+    }
+
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background-color: #000;
+      display: flex;
+      justify-content: space-around;
+      padding: 10px 0;
+      box-shadow: 0 -2px 5px rgba(0,0,0,0.1);
+      z-index: 100;
+      border-top: 1px solid #333;
+    }
+
+    .nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      color: white;
+      text-decoration: none;
+      font-size: 12px;
+      padding: 5px 10px;
+      opacity: 0.7;
+      transition: opacity 0.2s;
+    }
+
+    .nav-item i {
+      font-size: 22px;
+      margin-bottom: 3px;
+    }
+
+    .nav-item.active {
+      opacity: 1;
+    }
+  </style>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+  <div class="app-container">
+    <header class="app-header">
+      <a href="account.html" class="back-btn">←</a>
+      <div class="app-title">My Orders</div>
+    </header>
+
+    <main class="orders-content">
+      <div class="order-tabs">
+        <div class="order-tab active" onclick="showTab('current')">Current</div>
+        <div class="order-tab" onclick="showTab('history')">History</div>
+      </div>
+
+      <div id="current-orders" class="order-list active">
+        <div class="order-card">
+          <div class="order-header">
+            <div>
+              <div class="order-id">Order #LIMB-2023-0015</div>
+              <div class="order-date">Placed on Oct 15, 2023</div>
+            </div>
+            <div class="order-status status-processing">Processing</div>
+          </div>
+          
+          <div class="order-item">
+            <img src="tshirt1img.jpg" class="order-item-img" alt="Plain T-Shirt">
+            <div class="order-item-details">
+              <div class="order-item-name">Plain T-Shirt</div>
+              <div class="order-item-price">₱300.00 x 2</div>
+              <div class="order-item-options">Color: Black | Size: Large</div>
+            </div>
+          </div>
+          
+          <div class="order-item">
+            <img src="co1img.jpg" class="order-item-img" alt="Limbos Slashers Keychain">
+            <div class="order-item-details">
+              <div class="order-item-name">Limbos Slashers Keychain</div>
+              <div class="order-item-price">₱30.00 x 1</div>
+            </div>
+          </div>
+          
+          <div class="order-footer">
+            <div class="order-total">Total: ₱630.00</div>
+            <div class="order-actions">
+              <button class="order-btn cancel-btn">Cancel</button>
+              <button class="order-btn view-btn">View</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="order-card">
+          <div class="order-header">
+            <div>
+              <div class="order-id">Order #LIMB-2023-0014</div>
+              <div class="order-date">Placed on Oct 10, 2023</div>
+            </div>
+            <div class="order-status status-shipped">Shipped</div>
+          </div>
+          
+          <div class="order-item">
+            <img src="pants1img.jpg" class="order-item-img" alt="Basic Pants">
+            <div class="order-item-details">
+              <div class="order-item-name">Basic Pants</div>
+              <div class="order-item-price">₱500.00 x 1</div>
+              <div class="order-item-options">Color: Black | Size: 32</div>
+            </div>
+          </div>
+          
+          <div class="order-footer">
+            <div class="order-total">Total: ₱500.00</div>
+            <div class="order-actions">
+              <button class="order-btn view-btn">Track</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="history-orders" class="order-list">
+        <div class="order-card">
+          <div class="order-header">
+            <div>
+              <div class="order-id">Order #LIMB-2023-0013</div>
+              <div class="order-date">Placed on Oct 5, 2023</div>
+            </div>
+            <div class="order-status status-delivered">Delivered</div>
+          </div>
+          
+          <div class="order-item">
+            <img src="tshirt2img.jpg" class="order-item-img" alt="T-Shirt with Cross Designs">
+            <div class="order-item-details">
+              <div class="order-item-name">T-Shirt with Cross Designs</div>
+              <div class="order-item-price">₱400.00 x 1</div>
+              <div class="order-item-options">Color: White | Size: Medium</div>
+            </div>
+          </div>
+          
+          <div class="order-footer">
+            <div class="order-total">Total: ₱400.00</div>
+            <div class="order-actions">
+              <button class="order-btn reorder-btn">Reorder</button>
+              <button class="order-btn view-btn">View</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="order-card">
+          <div class="order-header">
+            <div>
+              <div class="order-id">Order #LIMB-2023-0012</div>
+              <div class="order-date">Placed on Sep 28, 2023</div>
+            </div>
+            <div class="order-status status-cancelled">Cancelled</div>
+          </div>
+          
+          <div class="order-item">
+            <img src="ac5img.jpg" class="order-item-img" alt="Limbus Cap">
+            <div class="order-item-details">
+              <div class="order-item-name">Limbus Cap</div>
+              <div class="order-item-price">₱350.00 x 1</div>
+            </div>
+          </div>
+          
+          <div class="order-footer">
+            <div class="order-total">Total: ₱350.00</div>
+            <div class="order-actions">
+              <button class="order-btn reorder-btn">Reorder</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="empty-current" class="empty-orders" style="display: none;">
+        <i class="fas fa-box-open"></i>
+        <h3>No Current Orders</h3>
+        <p>You don't have any active orders right now.</p>
+        <a href="Home.html" class="shop-btn">Shop Now</a>
+      </div>
+
+      <div id="empty-history" class="empty-orders" style="display: none;">
+        <i class="fas fa-history"></i>
+        <h3>No Order History</h3>
+        <p>Your past orders will appear here.</p>
+        <a href="Home.html" class="shop-btn">Shop Now</a>
+      </div>
+    </main>
+  </div>
+
+  <nav class="bottom-nav">
+    <a href="index.html" class="nav-item">
+      <i class="fas fa-home"></i>
+      <span>Home</span>
+    </a>
+    <a href="cart.html" class="nav-item">
+      <i class="fas fa-shopping-cart"></i>
+      <span>Cart</span>
+    </a>
+    <a href="Contact.html" class="nav-item">
+      <i class="fas fa-headset"></i>
+      <span>Contact</span>
+    </a>
+    <a href="account.html" class="nav-item">
+      <i class="fas fa-user"></i>
+      <span>Account</span>
+    </a>
+  </nav>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+    import { getFirestore, collection, query, where, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyAnf_PNL0nJAzcAC-Tozk9ugt8UIykeIu0",
+      authDomain: "login-1d138.firebaseapp.com",
+      projectId: "login-1d138",
+      storageBucket: "login-1d138.appspot.com",
+      messagingSenderId: "823918375870",
+      appId: "1:823918375870:web:13db570de493498df33fef"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const auth = getAuth(app);
+
+    function showTab(tabId) {
+      document.querySelectorAll('.order-tab').forEach(tab => {
+        tab.classList.remove('active');
+      });
+      document.querySelectorAll('.order-list').forEach(list => {
+        list.classList.remove('active');
+      });
+      
+      document.querySelector(`.order-tab[onclick="showTab('${tabId}')"]`).classList.add('active');
+      document.getElementById(`${tabId}-orders`).classList.add('active');
+    }
+
+    function loadOrders(userId) {
+      const currentOrdersQuery = query(
+        collection(db, "orders"), 
+        where("userId", "==", userId),
+        where("status", "in", ["pending", "processing", "shipped"])
+      );
+      
+      onSnapshot(currentOrdersQuery, (snapshot) => {
+        const currentOrdersContainer = document.getElementById("current-orders");
+        const emptyCurrent = document.getElementById("empty-current");
+        
+        if (snapshot.empty) {
+          currentOrdersContainer.style.display = "none";
+          emptyCurrent.style.display = "block";
+        } else {
+          currentOrdersContainer.style.display = "block";
+          emptyCurrent.style.display = "none";
+        }
+      });
+
+      const pastOrdersQuery = query(
+        collection(db, "orders"), 
+        where("userId", "==", userId),
+        where("status", "in", ["delivered", "cancelled"])
+      );
+      
+      onSnapshot(pastOrdersQuery, (snapshot) => {
+        const historyOrdersContainer = document.getElementById("history-orders");
+        const emptyHistory = document.getElementById("empty-history");
+        
+        if (snapshot.empty) {
+          historyOrdersContainer.style.display = "none";
+          emptyHistory.style.display = "block";
+        } else {
+          historyOrdersContainer.style.display = "block";
+          emptyHistory.style.display = "none";
+        }
+      });
+    }
+
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        loadOrders(user.uid);
+      } else {
+        window.location.href = "Login.html";
+      }
+    });
+
+    document.addEventListener('click', function(e) {
+      if (e.target.classList.contains('view-btn')) {
+        console.log("View order clicked");
+      }
+      
+      if (e.target.classList.contains('cancel-btn')) {
+        console.log("Cancel order clicked");
+      }
+      
+      if (e.target.classList.contains('reorder-btn')) {
+        console.log("Reorder clicked");
+      }
+    });
+  </script>
+</body>
+</html>
