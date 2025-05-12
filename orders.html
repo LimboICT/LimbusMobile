@@ -300,120 +300,9 @@
       </div>
 
       <div id="current-orders" class="order-list active">
-        <div class="order-card">
-          <div class="order-header">
-            <div>
-              <div class="order-id">Order #LIMB-2023-0015</div>
-              <div class="order-date">Placed on Oct 15, 2023</div>
-            </div>
-            <div class="order-status status-processing">Processing</div>
-          </div>
-          
-          <div class="order-item">
-            <img src="tshirt1img.jpg" class="order-item-img" alt="Plain T-Shirt">
-            <div class="order-item-details">
-              <div class="order-item-name">Plain T-Shirt</div>
-              <div class="order-item-price">₱300.00 x 2</div>
-              <div class="order-item-options">Color: Black | Size: Large</div>
-            </div>
-          </div>
-          
-          <div class="order-item">
-            <img src="co1img.jpg" class="order-item-img" alt="Limbos Slashers Keychain">
-            <div class="order-item-details">
-              <div class="order-item-name">Limbos Slashers Keychain</div>
-              <div class="order-item-price">₱30.00 x 1</div>
-            </div>
-          </div>
-          
-          <div class="order-footer">
-            <div class="order-total">Total: ₱630.00</div>
-            <div class="order-actions">
-              <button class="order-btn cancel-btn">Cancel</button>
-              <button class="order-btn view-btn">View</button>
-            </div>
-          </div>
-        </div>
-
-        <div class="order-card">
-          <div class="order-header">
-            <div>
-              <div class="order-id">Order #LIMB-2023-0014</div>
-              <div class="order-date">Placed on Oct 10, 2023</div>
-            </div>
-            <div class="order-status status-shipped">Shipped</div>
-          </div>
-          
-          <div class="order-item">
-            <img src="pants1img.jpg" class="order-item-img" alt="Basic Pants">
-            <div class="order-item-details">
-              <div class="order-item-name">Basic Pants</div>
-              <div class="order-item-price">₱500.00 x 1</div>
-              <div class="order-item-options">Color: Black | Size: 32</div>
-            </div>
-          </div>
-          
-          <div class="order-footer">
-            <div class="order-total">Total: ₱500.00</div>
-            <div class="order-actions">
-              <button class="order-btn view-btn">Track</button>
-            </div>
-          </div>
-        </div>
       </div>
 
       <div id="history-orders" class="order-list">
-        <div class="order-card">
-          <div class="order-header">
-            <div>
-              <div class="order-id">Order #LIMB-2023-0013</div>
-              <div class="order-date">Placed on Oct 5, 2023</div>
-            </div>
-            <div class="order-status status-delivered">Delivered</div>
-          </div>
-          
-          <div class="order-item">
-            <img src="tshirt2img.jpg" class="order-item-img" alt="T-Shirt with Cross Designs">
-            <div class="order-item-details">
-              <div class="order-item-name">T-Shirt with Cross Designs</div>
-              <div class="order-item-price">₱400.00 x 1</div>
-              <div class="order-item-options">Color: White | Size: Medium</div>
-            </div>
-          </div>
-          
-          <div class="order-footer">
-            <div class="order-total">Total: ₱400.00</div>
-            <div class="order-actions">
-              <button class="order-btn reorder-btn">Reorder</button>
-              <button class="order-btn view-btn">View</button>
-            </div>
-          </div>
-        </div>
-
-        <div class="order-card">
-          <div class="order-header">
-            <div>
-              <div class="order-id">Order #LIMB-2023-0012</div>
-              <div class="order-date">Placed on Sep 28, 2023</div>
-            </div>
-            <div class="order-status status-cancelled">Cancelled</div>
-          </div>
-          
-          <div class="order-item">
-            <img src="ac5img.jpg" class="order-item-img" alt="Limbus Cap">
-            <div class="order-item-details">
-              <div class="order-item-name">Limbus Cap</div>
-              <div class="order-item-price">₱350.00 x 1</div>
-            </div>
-          </div>
-          
-          <div class="order-footer">
-            <div class="order-total">Total: ₱350.00</div>
-            <div class="order-actions">
-              <button class="order-btn reorder-btn">Reorder</button>
-            </div>
-          </div>
-        </div>
       </div>
 
       <div id="empty-current" class="empty-orders" style="display: none;">
@@ -491,11 +380,44 @@
       onSnapshot(currentOrdersQuery, (snapshot) => {
         const currentOrdersContainer = document.getElementById("current-orders");
         const emptyCurrent = document.getElementById("empty-current");
-        
+
+        currentOrdersContainer.innerHTML = '';
+
         if (snapshot.empty) {
           currentOrdersContainer.style.display = "none";
           emptyCurrent.style.display = "block";
         } else {
+          snapshot.forEach(doc => {
+            const order = doc.data();
+            const orderCard = document.createElement('div');
+            orderCard.classList.add('order-card');
+            orderCard.innerHTML = `
+              <div class="order-header">
+                <div>
+                  <div class="order-id">Order #${order.orderId}</div>
+                  <div class="order-date">Placed on ${order.date}</div>
+                </div>
+                <div class="order-status status-${order.status.toLowerCase()}">${order.status}</div>
+              </div>
+              ${order.items.map(item => `
+                <div class="order-item">
+                  <img src="${item.image}" class="order-item-img" alt="${item.name}">
+                  <div class="order-item-details">
+                    <div class="order-item-name">${item.name}</div>
+                    <div class="order-item-price">${item.price}</div>
+                  </div>
+                </div>
+              `).join('')}
+              <div class="order-footer">
+                <div class="order-total">Total: ₱${order.total}</div>
+                <div class="order-actions">
+                  <button class="order-btn cancel-btn" onclick="cancelOrder('${doc.id}')">Cancel</button>
+                  <button class="order-btn view-btn" onclick="viewOrder('${doc.id}')">View</button>
+                </div>
+              </div>
+            `;
+            currentOrdersContainer.appendChild(orderCard);
+          });
           currentOrdersContainer.style.display = "block";
           emptyCurrent.style.display = "none";
         }
@@ -510,36 +432,64 @@
       onSnapshot(pastOrdersQuery, (snapshot) => {
         const historyOrdersContainer = document.getElementById("history-orders");
         const emptyHistory = document.getElementById("empty-history");
-        
+
+        historyOrdersContainer.innerHTML = '';
         if (snapshot.empty) {
           historyOrdersContainer.style.display = "none";
           emptyHistory.style.display = "block";
         } else {
+          snapshot.forEach(doc => {
+            const order = doc.data();
+            const orderCard = document.createElement('div');
+            orderCard.classList.add('order-card');
+            orderCard.innerHTML = `
+              <div class="order-header">
+                <div>
+                  <div class="order-id">Order #${order.orderId}</div>
+                  <div class="order-date">Placed on ${order.date}</div>
+                </div>
+                <div class="order-status status-${order.status.toLowerCase()}">${order.status}</div>
+              </div>
+              ${order.items.map(item => `
+                <div class="order-item">
+                  <img src="${item.image}" class="order-item-img" alt="${item.name}">
+                  <div class="order-item-details">
+                    <div class="order-item-name">${item.name}</div>
+                    <div class="order-item-price">${item.price}</div>
+                  </div>
+                </div>
+              `).join('')}
+              <div class="order-footer">
+                <div class="order-total">Total: ₱${order.total}</div>
+                <div class="order-actions">
+                  <button class="order-btn reorder-btn" onclick="reorder('${doc.id}')">Reorder</button>
+                  <button class="order-btn view-btn" onclick="viewOrder('${doc.id}')">View</button>
+                </div>
+              </div>
+            `;
+            historyOrdersContainer.appendChild(orderCard);
+          });
           historyOrdersContainer.style.display = "block";
           emptyHistory.style.display = "none";
         }
       });
     }
 
+    function cancelOrder(orderId) {
+      console.log(`Cancel order clicked for ${orderId}`);
+    }
+
+    function viewOrder(orderId) {
+      console.log(`View order clicked for ${orderId}`);
+    }
+
+    function reorder(orderId) {
+      console.log(`Reorder clicked for ${orderId}`);
+    }
+
     onAuthStateChanged(auth, (user) => {
       if (user) {
         loadOrders(user.uid);
-      } else {
-        window.location.href = "Login.html";
-      }
-    });
-
-    document.addEventListener('click', function(e) {
-      if (e.target.classList.contains('view-btn')) {
-        console.log("View order clicked");
-      }
-      
-      if (e.target.classList.contains('cancel-btn')) {
-        console.log("Cancel order clicked");
-      }
-      
-      if (e.target.classList.contains('reorder-btn')) {
-        console.log("Reorder clicked");
       }
     });
   </script>
