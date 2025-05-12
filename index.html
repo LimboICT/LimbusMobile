@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Limbus - Home</title>
+  <link rel="icon" href="limbus.png" type="image/png">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f0f0;
+      user-select: none;
+      overflow-x: hidden;
+      height: 100%;
+    }
+
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: black;
+      color: white;
+      padding: 20px;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+      height: 70px;
+    }
+
+    .logo {
+      cursor: pointer;
+      width: 40px;
+      height: auto;
+    }
+
+    .menu {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .menu a {
+      color: white;
+      text-decoration: none;
+      font-size: 18px;
+      padding: 12px 20px;
+      border-radius: 5px;
+      transition: background 0.3s;
+    }
+
+    .menu a:hover {
+      background-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .cart-btn {
+      padding: 10px 20px;
+      text-decoration: none;
+      color: white;
+      background-color: black;
+      border-radius: 5px;
+      font-size: 18px;
+      transition: background 0.3s;
+      margin-left: 15px;
+    }
+
+    .cart-btn:hover {
+      background-color: gray;
+    }
+
+    #user-welcome {
+      margin-left: 10px;
+      color: white;
+      font-size: 18px;
+    }
+
+    .categories {
+      padding-top: 120px;
+      padding-bottom: 50px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      max-width: 100%;
+      margin: auto;
+    }
+
+    .category-card {
+      background: #ffffff;
+      border-radius: 12px;
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+      cursor: pointer;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-end;
+      width: 100%;
+      height: 100vh;
+    }
+
+    .category-card:hover {
+      transform: scale(1.03);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    .image-grid {
+      position: relative;
+      width: 100%;
+      height: 100%;
+    }
+
+    .image-grid img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      position: absolute;
+      opacity: 0;
+      transition: opacity 1s;
+    }
+
+    .image-grid img.active {
+      opacity: 1;
+    }
+
+    .category-label {
+      text-align: center;
+      padding: 20px;
+      font-size: 22px;
+      font-weight: bold;
+      background-color: black;
+      color: white;
+      transition: background 0.3s ease;
+      width: 100%;
+    }
+
+    .category-card:hover .category-label {
+      background-color: gray;
+    }
+
+    .login-signup-btns {
+      text-align: center;
+      margin: 40px 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .login-signup-btns a {
+      padding: 16px 30px;
+      text-decoration: none;
+      color: white;
+      background-color: black;
+      border-radius: 5px;
+      font-size: 18px;
+      transition: background 0.3s;
+    }
+
+    .login-signup-btns a:hover {
+      background-color: gray;
+    }
+
+    @media (max-width: 768px) {
+      .navbar {
+        flex-direction: column;
+        align-items: flex-start;
+        height: 90px;
+      }
+
+      .menu {
+        width: 100%;
+        flex-direction: column;
+        margin-top: 10px;
+      }
+
+      .menu a {
+        padding: 15px;
+        font-size: 18px;
+      }
+
+      .cart-btn {
+        margin: 10px 0 0;
+      }
+
+      #user-welcome {
+        margin-top: 10px;
+      }
+
+      .categories {
+        padding-top: 100px;
+        padding-bottom: 20px;
+      }
+
+      .category-card {
+        height: 100vh; /* Full screen height for mobile */
+      }
+
+      .category-label {
+        font-size: 24px;
+      }
+
+      .login-signup-btns {
+        gap: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="navbar">
+    <img src="limbus.png" alt="Limbus Logo" class="logo" onclick="location.href='congratulations.html'">
+    <div class="menu">
+      <a href="Home.html">Home</a>
+      <a href="Contact.html">Contact Us</a>
+    </div>
+    <a href="cart.html" class="cart-btn">Cart</a>
+    <span id="user-welcome" style="display: none; margin-left: 10px; color: white;"></span>
+  </div>
+
+  <div class="categories">
+    <div class="category-card" onclick="location.href='MainPage.html'">
+      <div class="image-grid">
+        <img src="tshirt3img.jpg" alt="" class="category-image active">
+        <img src="tshirt2img.jpg" alt="" class="category-image">
+        <img src="tshirt1img.jpg" alt="" class="category-image">
+        <img src="tshirt2img.jpg" alt="" class="category-image">
+      </div>
+      <div class="category-label">T-Shirts</div>
+    </div>
+
+    <div class="category-card" onclick="location.href='MainPage2.html'">
+      <div class="image-grid">
+        <img src="pants1img.jpg" alt="" class="category-image active">
+        <img src="pants2img.jpg" alt="" class="category-image">
+        <img src="pants3img.jpg" alt="" class="category-image">
+        <img src="pants2img.jpg" alt="" class="category-image">
+      </div>
+      <div class="category-label">Pants</div>
+    </div>
+
+    <div class="category-card" onclick="location.href='MainPage3.html'">
+      <div class="image-grid">
+        <img src="ac5img.jpg" alt="" class="category-image active">
+        <img src="ac4img.jpg" alt="" class="category-image">
+        <img src="ac5img.jpg" alt="" class="category-image">
+        <img src="ac4img.jpg" alt="" class="category-image">
+      </div>
+      <div class="category-label">Accessories</div>
+    </div>
+
+    <div class="category-card" onclick="location.href='MainPage4.html'">
+      <div class="image-grid">
+        <img src="co2img.jpg" alt="" class="category-image active">
+        <img src="co2img.jpg" alt="" class="category-image">
+        <img src="co1img.jpg" alt="" class="category-image">
+        <img src="co3img.jpg" alt="" class="category-image">
+      </div>
+      <div class="category-label">Collectibles</div>
+    </div>
+  </div>
+
+  <div class="login-signup-btns">
+    <a href="Login.html" id="login-btn">Log In</a>
+    <a href="Signup.html" id="signup-btn">Sign Up</a>
+    <a href="#" id="logout-btn" style="display: none;">Log Out</a>
+  </div>
+
+  <script type="module" src="firebaseAuth.js"></script>
+
+  <script>
+    const auth = firebase.auth();
+
+    function checkUserAuth() {
+      firebase.auth().onAuthStateChanged((user) => {
+        const loginBtn = document.getElementById('login-btn');
+        const signupBtn = document.getElementById('signup-btn');
+        const logoutBtn = document.getElementById('logout-btn');
+        const userWelcome = document.getElementById('user-welcome');
+        
+        if (user) {
+          loginBtn.style.display = 'none';
+          signupBtn.style.display = 'none';
+          logoutBtn.style.display = 'inline-block';
+          userWelcome.style.display = 'inline-block';
+          userWelcome.innerText = `Welcome, ${user.displayName || 'User'}`;
+        } else {
+          loginBtn.style.display = 'inline-block';
+          signupBtn.style.display = 'inline-block';
+          logoutBtn.style.display = 'none';
+          userWelcome.style.display = 'none';
+        }
+      });
+    }
+
+    function handleLogout() {
+      const logoutBtn = document.getElementById('logout-btn');
+      logoutBtn.addEventListener('click', () => {
+        firebase.auth().signOut().then(() => {
+          location.reload();
+        }).catch((error) => {
+          console.error('Error logging out:', error.message);
+        });
+      });
+    }
+
+    window.onload = function() {
+      checkUserAuth();
+      startImageSlider();
+      handleLogout();
+    };
+
+    function startImageSlider() {
+      const categoryImages = document.querySelectorAll('.category-image');
+      
+      setInterval(() => {
+        categoryImages.forEach((image, index) => {
+          const currentCategory = image.parentElement;
+          const images = currentCategory.querySelectorAll('.category-image');
+          
+          const activeImage = currentCategory.querySelector('.category-image.active');
+          let nextIndex = [...images].indexOf(activeImage) + 1;
+          if (nextIndex === images.length) {
+            nextIndex = 0;
+          }
+
+          images.forEach(img => img.classList.remove('active'));
+          images[nextIndex].classList.add('active');
+        });
+      }, 2000);
+    }
+  </script>
+
+</body>
+</html>
