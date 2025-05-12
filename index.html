@@ -334,8 +334,6 @@
       firebase.auth().onAuthStateChanged((user) => {
         const loginBtn = document.getElementById('login-btn');
         const signupBtn = document.getElementById('signup-btn');
-        const logoutBtn = document.getElementById('logout-btn');
-        const userWelcome = document.getElementById('user-welcome');
         const accountBtn = document.getElementById('account-btn');
         
         if (user) {
