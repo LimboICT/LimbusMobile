@@ -34,7 +34,6 @@
       padding-bottom: 60px;
     }
 
-    /* App Header */
     .app-header {
       background-color: #000;
       color: white;
@@ -50,7 +49,6 @@
       font-weight: 600;
     }
 
-    /* Contact Content */
     .contact-content {
       flex: 1;
       padding: 20px;
@@ -83,7 +81,6 @@
       line-height: 1.5;
     }
 
-    /* Contact Form */
     .contact-form input,
     .contact-form textarea {
       width: 100%;
@@ -117,7 +114,6 @@
       background-color: #333;
     }
 
-    /* Status Messages */
     .status-message {
       margin-top: 15px;
       padding: 10px;
@@ -139,7 +135,6 @@
       border: 1px solid rgba(0, 0, 0, 0.2);
     }
 
-    /* Bottom Navigation */
     .bottom-nav {
       position: fixed;
       bottom: 0;
@@ -175,7 +170,6 @@
       opacity: 1;
     }
 
-    /* Responsive Adjustments */
     @media (min-width: 768px) {
       .contact-card {
         padding: 30px;
@@ -190,7 +184,6 @@
       }
     }
   </style>
-  <!-- Using Font Awesome for icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
@@ -216,8 +209,7 @@
       </div>
     </main>
   </div>
-
-  <!-- Bottom Navigation -->
+  
   <nav class="bottom-nav">
     <a href="Home.html" class="nav-item">
       <i class="fas fa-home"></i>
@@ -253,14 +245,11 @@
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
-    // Mobile app-like behavior
     document.addEventListener('DOMContentLoaded', function() {
-      // Prevent zooming
       document.addEventListener('gesturestart', function(e) {
         e.preventDefault();
       });
-
-      // Form submission
+      
       const contactForm = document.getElementById('contactForm');
       const statusMessage = document.getElementById('statusMessage');
       const errorMessage = document.getElementById('errorMessage');
@@ -285,7 +274,6 @@
             errorMessage.style.display = 'none';
             contactForm.reset();
             
-            // Hide success message after 5 seconds
             setTimeout(() => {
               statusMessage.style.display = 'none';
             }, 5000);
@@ -300,8 +288,7 @@
         }
       });
     });
-
-    // Security measures
+    
     document.addEventListener("contextmenu", (event) => event.preventDefault());
     document.addEventListener("copy", (event) => {
       event.preventDefault();
