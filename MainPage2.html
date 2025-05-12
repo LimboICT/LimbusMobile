@@ -264,7 +264,7 @@
     function checkUserAuth() {
       firebase.auth().onAuthStateChanged((user) => {
         const loginBtn = document.getElementById('login-btn');
-        const signupBtn = document.getElementById('signup-btn');
+        const signupBtn = document.getElementById('signup-btn'); 
         
         if (user) {
           loginBtn.style.display = 'none';
