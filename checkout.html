@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Limbus - Checkout</title>
+  <link rel="icon" href="limbus.png" type="image/png">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      background-color: #f8f8f8;
+      color: #333;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .app-container {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+      padding-bottom: 70px;
+    }
+
+    .app-header {
+      background-color: #000;
+      color: white;
+      padding: 15px;
+      text-align: center;
+      position: relative;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      z-index: 10;
+    }
+
+    .back-btn {
+      position: absolute;
+      left: 15px;
+      top: 15px;
+      color: white;
+      text-decoration: none;
+      font-size: 20px;
+    }
+
+    .app-title {
+      font-size: 20px;
+      font-weight: 600;
+    }
+
+    .checkout-content {
+      flex: 1;
+      padding: 15px;
+    }
+
+    .checkout-section {
+      background: white;
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 15px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+
+    .section-title {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 15px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid #f0f0f0;
+    }
+
+    .input-group {
+      margin-bottom: 15px;
+    }
+
+    .input-label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: 500;
+      font-size: 14px;
+    }
+
+    .checkout-input {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      font-size: 16px;
+      background-color: #f9f9f9;
+    }
+
+    .payment-option {
+      display: flex;
+      align-items: center;
+      padding: 12px;
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      margin-bottom: 10px;
+      cursor: pointer;
+    }
+
+    .payment-option.active {
+      border-color: #000;
+      background-color: #f0f0f0;
+    }
+
+    .payment-icon {
+      width: 30px;
+      height: 30px;
+      margin-right: 10px;
+      object-fit: contain;
+    }
+
+    .order-summary {
+      background: white;
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+
+    .order-item {
+      display: flex;
+      margin-bottom: 15px;
+      padding-bottom: 15px;
+      border-bottom: 1px solid #f0f0f0;
+    }
+
+    .order-item:last-child {
+      border-bottom: none;
+      margin-bottom: 0;
+      padding-bottom: 0;
+    }
+
+    .order-item-img {
+      width: 60px;
+      height: 60px;
+      object-fit: cover;
+      border-radius: 8px;
+      margin-right: 15px;
+    }
+
+    .order-item-details {
+      flex: 1;
+    }
+
+    .order-item-name {
+      font-weight: 600;
+      margin-bottom: 5px;
+    }
+
+    .order-item-price {
+      color: #666;
+      font-size: 14px;
+    }
+
+    .order-item-options {
+      color: #999;
+      font-size: 13px;
+      margin-top: 3px;
+    }
+
+    .order-total {
+      margin-top: 15px;
+      padding-top: 15px;
+      border-top: 1px solid #f0f0f0;
+      font-weight: 600;
+      font-size: 18px;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .place-order-btn {
+      width: 100%;
+      padding: 16px;
+      background-color: #000;
+      color: white;
+      border: none;
+      border-radius: 12px;
+      font-size: 18px;
+      font-weight: 500;
+      margin-top: 20px;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+
+    .place-order-btn:active {
+      background-color: #333;
+    }
+
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background-color: #000;
+      display: flex;
+      justify-content: space-around;
+      padding: 10px 0;
+      box-shadow: 0 -2px 5px rgba(0,0,0,0.1);
+      z-index: 100;
+      border-top: 1px solid #333;
+    }
+
+    .nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      color: white;
+      text-decoration: none;
+      font-size: 12px;
+      padding: 5px 10px;
+      opacity: 0.7;
+      transition: opacity 0.2s;
+    }
+
+    .nav-item i {
+      font-size: 22px;
+      margin-bottom: 3px;
+    }
+
+    .nav-item.active {
+      opacity: 1;
+    }
+
+    @media (min-width: 768px) {
+      .checkout-content {
+        display: flex;
+        gap: 15px;
+      }
+      
+      .checkout-section {
+        flex: 2;
+      }
+      
+      .order-summary {
+        flex: 1;
+        position: sticky;
+        top: 15px;
+        max-height: calc(100vh - 30px);
+        overflow-y: auto;
+      }
+    }
+  </style>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+  <div class="app-container">
+    <header class="app-header">
+      <a href="cart.html" class="back-btn">←</a>
+      <div class="app-title">Checkout</div>
+    </header>
+
+    <main class="checkout-content">
+      <div class="checkout-section">
+        <div class="section-title">Shipping Information</div>
+        
+        <div class="input-group">
+          <label class="input-label">Full Name</label>
+          <input type="text" id="full-name" class="checkout-input" placeholder="Your full name" required>
+        </div>
+        
+        <div class="input-group">
+          <label class="input-label">Shipping Address</label>
+          <input type="text" id="address" class="checkout-input" placeholder="Complete address" required>
+        </div>
+        
+        <div class="input-group">
+          <label class="input-label">Contact Number</label>
+          <input type="text" id="contact-number" class="checkout-input" placeholder="Phone number" required>
+        </div>
+
+        <div class="section-title">Payment Method</div>
+        
+        <div class="payment-option" onclick="selectPayment('cash')">
+          <img src="https://cdn-icons-png.flaticon.com/512/270/270781.png" class="payment-icon" alt="Cash">
+          <div>Cash on Delivery</div>
+        </div>
+        
+        <div class="payment-option" onclick="selectPayment('gcash')">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Gcash_logo.svg/1200px-Gcash_logo.svg.png" class="payment-icon" alt="GCash">
+          <div>GCash</div>
+        </div>
+        
+        <div class="input-group" id="gcash-number-group" style="display: none;">
+          <label class="input-label">GCash Number</label>
+          <input type="text" id="gcash-number" class="checkout-input" placeholder="09XXXXXXXXX">
+        </div>
+      </div>
+
+      <div class="order-summary">
+        <div class="section-title">Order Summary</div>
+        <div id="order-items"></div>
+        <div class="order-total">
+          <span>Total:</span>
+          <span id="total-price">₱0.00</span>
+        </div>
+        <button class="place-order-btn" id="place-order-btn">Place Order</button>
+      </div>
+    </main>
+  </div>
+
+  <nav class="bottom-nav">
+    <a href="Home.html" class="nav-item">
+      <i class="fas fa-home"></i>
+      <span>Home</span>
+    </a>
+    <a href="cart.html" class="nav-item">
+      <i class="fas fa-shopping-cart"></i>
+      <span>Cart</span>
+    </a>
+    <a href="Contact.html" class="nav-item">
+      <i class="fas fa-headset"></i>
+      <span>Contact</span>
+    </a>
+    <a href="account.html" class="nav-item">
+      <i class="fas fa-user"></i>
+      <span>Account</span>
+    </a>
+  </nav>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+    import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyAnf_PNL0nJAzcAC-Tozk9ugt8UIykeIu0",
+      authDomain: "login-1d138.firebaseapp.com",
+      projectId: "login-1d138",
+      storageBucket: "login-1d138.appspot.com",
+      messagingSenderId: "823918375870",
+      appId: "1:823918375870:web:13db570de493498df33fef"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const auth = getAuth(app);
+
+    let cart = JSON.parse(localStorage.getItem("cart")) || [];
+    let user = null;
+    let selectedPayment = "cash";
+
+    function selectPayment(method) {
+      selectedPayment = method;
+      document.querySelectorAll(".payment-option").forEach(option => {
+        option.classList.remove("active");
+      });
+      event.currentTarget.classList.add("active");
+      
+      const gcashGroup = document.getElementById("gcash-number-group");
+      if (method === "gcash") {
+        gcashGroup.style.display = "block";
+      } else {
+        gcashGroup.style.display = "none";
+      }
+    }
+
+    function loadOrderSummary() {
+      const orderItems = document.getElementById("order-items");
+      orderItems.innerHTML = "";
+      
+      if (cart.length === 0) {
+        orderItems.innerHTML = "<p>Your cart is empty.</p>";
+        document.getElementById("place-order-btn").disabled = true;
+        return;
+      }
+
+      let total = 0;
+      cart.forEach(item => {
+        total += item.price * item.quantity;
+        orderItems.innerHTML += `
+          <div class="order-item">
+            <img src="${item.image}" alt="${item.name}" class="order-item-img">
+            <div class="order-item-details">
+              <div class="order-item-name">${item.name}</div>
+              <div class="order-item-price">₱${(item.price * item.quantity).toFixed(2)}</div>
+              <div class="order-item-options">
+                ${item.color ? `Color: ${item.color} | ` : ''}
+                ${item.size ? `Size: ${item.size} | ` : ''}
+                Qty: ${item.quantity}
+              </div>
+            </div>
+          </div>
+        `;
+      });
+      
+      document.getElementById("total-price").textContent = `₱${total.toFixed(2)}`;
+    }
+
+    document.getElementById("place-order-btn").addEventListener("click", async function() {
+      const fullName = document.getElementById("full-name").value.trim();
+      const address = document.getElementById("address").value.trim();
+      const contactNumber = document.getElementById("contact-number").value.trim();
+      const gcashNumber = selectedPayment === "gcash" ? document.getElementById("gcash-number").value.trim() : null;
+
+      if (!fullName || !address || !contactNumber) {
+        Swal.fire({
+          title: "Error",
+          text: "Please complete all required fields",
+          icon: "error",
+          background: "#000",
+          color: "#fff",
+          showConfirmButton: false,
+          timer: 1500
+        });
+        return;
+      }
+
+      if (selectedPayment === "gcash" && !gcashNumber) {
+        Swal.fire({
+          title: "Error",
+          text: "Please enter your GCash number",
+          icon: "error",
+          background: "#000",
+          color: "#fff",
+          showConfirmButton: false,
+          timer: 1500
+        });
+        return;
+      }
+
+      const orderData = {
+        userId: user.uid,
+        shipping: { fullName, address, contactNumber },
+        paymentMethod: selectedPayment,
+        gcashNumber,
+        items: cart,
+        total: cart.reduce((acc, item) => acc + (item.price * item.quantity), 0),
+        status: "pending",
+        createdAt: serverTimestamp()
+      };
+
+      try {
+        await addDoc(collection(db, "orders"), orderData);
+        
+        Swal.fire({
+          title: "Success!",
+          text: "Your order has been placed",
+          icon: "success",
+          background: "#000",
+          color: "#fff",
+          showConfirmButton: false,
+          timer: 1500
+        });
+
+        localStorage.removeItem("cart");
+        setTimeout(() => window.location.href = "Home.html", 1500);
+        
+      } catch (error) {
+        console.error("Error placing order:", error);
+        Swal.fire({
+          title: "Error",
+          text: "Failed to place order. Please try again.",
+          icon: "error",
+          background: "#000",
+          color: "#fff",
+          showConfirmButton: false,
+          timer: 1500
+        });
+      }
+    });
+
+    onAuthStateChanged(auth, (currentUser) => {
+      if (currentUser) {
+        user = currentUser;
+        loadOrderSummary();
+        selectPayment("cash");
+      } else {
+        window.location.href = "Login.html?redirect=checkout";
+      }
+    });
+  </script>
+</body>
+</html>
