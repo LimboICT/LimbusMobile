@@ -200,7 +200,6 @@
   <div class="app-container">
     <header class="app-header">
       <div class="app-title">T-Shirts</div>
-      <div id="user-welcome"></div>
     </header>
 
     <main class="products-container">
@@ -267,8 +266,6 @@
       firebase.auth().onAuthStateChanged((user) => {
         const loginBtn = document.getElementById('login-btn');
         const signupBtn = document.getElementById('signup-btn');
-        const logoutBtn = document.getElementById('logout-btn');
-        const userWelcome = document.getElementById('user-welcome');
         
         if (user) {
           loginBtn.style.display = 'none';
@@ -277,18 +274,6 @@
           loginBtn.style.display = 'block';
           signupBtn.style.display = 'block';
         }
-      });
-    }
-
-    function handleLogout() {
-      const logoutBtn = document.getElementById('logout-btn');
-      logoutBtn.addEventListener('click', (e) => {
-        e.preventDefault();
-        firebase.auth().signOut().then(() => {
-          location.reload();
-        }).catch((error) => {
-          console.error('Error logging out:', error.message);
-        });
       });
     }
 
