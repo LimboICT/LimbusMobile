@@ -36,7 +36,7 @@ document.getElementById("login-button").addEventListener("click", () => {
       alert("Login successful!");
 
       // Redirect to a dashboard or home page after successful login
-      window.location.href = "Home.html"; // Change this to your desired page
+      window.location.href = "index.html"; // Change this to your desired page
     })
     .catch((error) => {
       // Handle errors
