@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Limbus - Product</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      background-color: #f8f8f8;
+      user-select: none;
+      overflow-x: hidden;
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      color: #333;
+    }
+
+    .app-container {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+      padding-bottom: 60px;
+    }
+
+    .app-header {
+      background-color: #000;
+      color: white;
+      padding: 15px;
+      text-align: center;
+      position: relative;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      z-index: 10;
+    }
+
+    .back-btn {
+      position: absolute;
+      left: 15px;
+      top: 15px;
+      color: white;
+      text-decoration: none;
+      font-size: 20px;
+    }
+
+    .app-title {
+      font-size: 20px;
+      font-weight: 600;
+    }
+
+    .product-content {
+      flex: 1;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .product-card {
+      background: white;
+      width: 100%;
+      max-width: 500px;
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+      margin-top: 20px;
+    }
+
+    .product-image {
+      width: 100%;
+      height: 300px;
+      object-fit: contain;
+      margin-bottom: 20px;
+      border-radius: 8px;
+      background-color: #f0f0f0;
+    }
+
+    .product-name {
+      font-size: 22px;
+      font-weight: 600;
+      margin-bottom: 10px;
+      text-align: center;
+    }
+
+    .product-price {
+      font-size: 20px;
+      font-weight: 500;
+      margin-bottom: 20px;
+      text-align: center;
+      color: #000;
+    }
+
+    .options-section {
+      margin-bottom: 20px;
+    }
+
+    .option-label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 500;
+    }
+
+    .option-select {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      font-size: 16px;
+      background-color: #f9f9f9;
+      margin-bottom: 15px;
+    }
+
+    .quantity-control {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .quantity-btn {
+      width: 40px;
+      height: 40px;
+      background-color: #000;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+
+    .quantity-input {
+      flex: 1;
+      text-align: center;
+      font-size: 18px;
+      margin: 0 10px;
+    }
+
+    .add-to-cart-btn {
+      width: 100%;
+      padding: 16px;
+      background-color: #000;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 18px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+
+    .add-to-cart-btn:active {
+      background-color: #333;
+    }
+
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background-color: #000;
+      display: flex;
+      justify-content: space-around;
+      padding: 10px 0;
+      box-shadow: 0 -2px 5px rgba(0,0,0,0.1);
+      z-index: 100;
+      border-top: 1px solid #333;
+    }
+
+    .nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      color: white;
+      text-decoration: none;
+      font-size: 12px;
+      padding: 5px 10px;
+      opacity: 0.7;
+      transition: opacity 0.2s;
+    }
+
+    .nav-item i {
+      font-size: 22px;
+      margin-bottom: 3px;
+    }
+
+    .nav-item.active {
+      opacity: 1;
+    }
+
+    #dark-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.7);
+      z-index: 9998;
+      display: none;
+    }
+
+    #success-popup {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: #222;
+      color: white;
+      padding: 20px 40px;
+      border-radius: 10px;
+      font-size: 18px;
+      z-index: 9999;
+      text-align: center;
+      font-weight: bold;
+      opacity: 0;
+      box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.5);
+    }
+
+    #success-popup span {
+      font-size: 40px;
+      margin-right: 10px;
+      color: #fff;
+    }
+
+    #success-popup p {
+      margin-top: 10px;
+      font-size: 16px;
+    }
+
+    @keyframes popupIn {
+      0% { opacity: 0; transform: translate(-50%, -50%) scale(0.3); }
+      100% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+    }
+
+    @keyframes popupOut {
+      0% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+      100% { opacity: 0; transform: translate(-50%, -50%) scale(0.3); }
+    }
+
+    #success-popup.show {
+      display: block;
+      animation: popupIn 0.4s ease forwards;
+    }
+
+    #success-popup.hide {
+      animation: popupOut 0.3s ease forwards;
+    }
+
+    @media (max-width: 400px) {
+      .product-image {
+        height: 250px;
+      }
+    }
+  </style>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+  <div class="app-container">
+    <header class="app-header">
+      <a class="back-btn" onclick="fadeOutAndGoBack()">←</a>
+      <div class="app-title">Product Details</div>
+    </header>
+
+    <main class="product-content">
+      <div class="product-card">
+        <img id="product-image" src="" alt="Product Image" class="product-image">
+        <h1 id="product-name" class="product-name">Product Name</h1>
+        <p id="product-price" class="product-price">₱0.00</p>
+        
+        <div class="options-section" id="color-option">
+          <label class="option-label">Color:</label>
+          <select class="option-select" id="color">
+            <option value="Black">Black</option>
+            <option value="White">White</option>
+            <option value="Gray">Gray</option>
+          </select>
+        </div>
+
+        <div class="options-section" id="size-option">
+          <label class="option-label">Size:</label>
+          <select class="option-select" id="size">
+            <option value="Small">Small</option>
+            <option value="Medium">Medium</option>
+            <option value="Large">Large</option>
+            <option value="XL">XL</option>
+          </select>
+        </div>
+
+        <div class="options-section">
+          <label class="option-label">Quantity:</label>
+          <div class="quantity-control">
+            <button class="quantity-btn" onclick="adjustQuantity(-1)">-</button>
+            <input type="number" id="quantity" class="quantity-input" value="1" min="1">
+            <button class="quantity-btn" onclick="adjustQuantity(1)">+</button>
+          </div>
+        </div>
+
+        <button class="add-to-cart-btn" onclick="addToCart()">Add to Cart</button>
+      </div>
+    </main>
+  </div>
+
+  <div id="dark-overlay"></div>
+  <div id="success-popup"><span>✔</span><p>Success Message</p></div>
+  <audio id="success-sound" src="ding.mp3" preload="auto"></audio>
+
+  <nav class="bottom-nav">
+    <a href="Home.html" class="nav-item">
+      <i class="fas fa-home"></i>
+      <span>Home</span>
+    </a>
+    <a href="cart.html" class="nav-item">
+      <i class="fas fa-shopping-cart"></i>
+      <span>Cart</span>
+    </a>
+    <a href="Contact.html" class="nav-item">
+      <i class="fas fa-headset"></i>
+      <span>Contact</span>
+    </a>
+    <a href="account.html" class="nav-item">
+      <i class="fas fa-user"></i>
+      <span>Account</span>
+    </a>
+  </nav>
+
+  <script>
+    window.addEventListener('load', function() {
+      document.body.style.opacity = 1;
+    });
+
+    const params = new URLSearchParams(window.location.search);
+    const name = params.get('name');
+    const price = params.get('price');
+    const image = params.get('image');
+    const hasSize = params.get('hasSize') === 'true';
+    const hasColor = params.get('hasColor') === 'true';
+    const editMode = params.get('edit') === 'true';
+    const itemIndex = params.get('index');
+
+    const color1 = params.get('color1');
+    const color1Image = params.get('color1Image');
+    const color2 = params.get('color2');
+    const color2Image = params.get('color2Image');
+    const color3 = params.get('color3');
+    const color3Image = params.get('color3Image');
+
+    if (name && price && image) {
+      document.getElementById('product-name').textContent = name;
+      document.getElementById('product-price').textContent = `₱${price}`;
+      document.getElementById('product-image').src = image;
+
+      if (!hasColor) document.getElementById('color-option').style.display = 'none';
+      if (!hasSize) document.getElementById('size-option').style.display = 'none';
+
+      if (editMode && itemIndex !== null) {
+        const cart = JSON.parse(localStorage.getItem("cart")) || [];
+        const currentItem = cart[itemIndex];
+        if (currentItem) {
+          document.getElementById('quantity').value = currentItem.quantity || 1;
+          if (hasColor && currentItem.color) document.getElementById('color').value = currentItem.color;
+          if (hasSize && currentItem.size) document.getElementById('size').value = currentItem.size;
+          updatePrice(parseFloat(price), currentItem.quantity);
+          document.querySelector('.add-to-cart-btn').textContent = 'Update Cart';
+        }
+      }
+    }
+
+    function updatePrice(basePrice, quantity) {
+      const updatedPrice = basePrice * quantity;
+      document.getElementById('product-price').textContent = `₱${updatedPrice.toFixed(2)}`;
+    }
+
+    function adjustQuantity(change) {
+      const quantityInput = document.getElementById('quantity');
+      let newQuantity = parseInt(quantityInput.value) + change;
+      if (newQuantity < 1) newQuantity = 1;
+      quantityInput.value = newQuantity;
+      updatePrice(parseFloat(price), newQuantity);
+    }
+
+    document.getElementById('quantity').addEventListener('input', function() {
+      const quantity = parseInt(this.value) || 1;
+      updatePrice(parseFloat(price), quantity);
+    });
+
+    const colorSelect = document.getElementById('color');
+    colorSelect.addEventListener('change', function() {
+      const selectedColor = colorSelect.value;
+      if (selectedColor === "Black" && color1Image) {
+        document.getElementById('product-image').src = color1Image;
+      } else if (selectedColor === "White" && color2Image) {
+        document.getElementById('product-image').src = color2Image;
+      } else if (selectedColor === "Gray" && color3Image) {
+        document.getElementById('product-image').src = color3Image;
+      }
+    });
+
+    function showSuccessPopup(message) {
+      const popup = document.getElementById("success-popup");
+      const overlay = document.getElementById("dark-overlay");
+      const sound = document.getElementById("success-sound");
+
+      overlay.style.display = "block";
+      popup.querySelector("p").textContent = message;
+      popup.classList.remove("hide");
+      popup.classList.add("show");
+      sound.volume = 0.2;
+      sound.currentTime = 0;
+      sound.play();
+
+      setTimeout(() => {
+        popup.classList.remove("show");
+        popup.classList.add("hide");
+        setTimeout(() => {
+          popup.style.display = "none";
+          overlay.style.display = "none";
+        }, 300);
+      }, 2000);
+    }
+
+    function addToCart() {
+      const selectedColor = document.getElementById('color').value;
+      const selectedSize = document.getElementById('size').value;
+      const selectedQuantity = document.getElementById('quantity').value;
+
+      if (hasColor && !selectedColor) return alert("Please select a color.");
+      if (hasSize && !selectedSize) return alert("Please select a size.");
+      if (selectedQuantity < 1) return alert("Please enter a valid quantity.");
+
+      const cartItem = {
+        name,
+        price,
+        image: document.getElementById('product-image').src,
+        color: hasColor ? selectedColor : null,
+        size: hasSize ? selectedSize : null,
+        quantity: selectedQuantity
+      };
+
+      const cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+      if (editMode) {
+        cart[itemIndex] = cartItem;
+        showSuccessPopup("Item Updated");
+      } else {
+        cart.push(cartItem);
+        showSuccessPopup("Added to Cart");
+      }
+
+      localStorage.setItem("cart", JSON.stringify(cart));
+
+      setTimeout(() => {
+        window.location.href = localStorage.getItem("previousPage") || (editMode ? "cart.html" : "products.html");
+      }, 2000);
+    }
+
+    function fadeOutAndGoBack() {
+      document.body.style.opacity = 0;
+      setTimeout(() => {
+        window.location.href = localStorage.getItem("previousPage") || "Home.html";
+      }, 300);
+    }
+
+    window.onload = function() {
+      if (document.referrer) {
+        localStorage.setItem("previousPage", document.referrer);
+      }
+
+      if (editMode && hasColor) {
+        colorSelect.dispatchEvent(new Event('change'));
+      }
+    };
+  </script>
+</body>
+</html>
