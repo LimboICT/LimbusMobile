@@ -279,20 +279,9 @@
         <div class="section-title">Payment Method</div>
         
         <div class="payment-option" onclick="selectPayment('cash')">
-          <img src="https://cdn-icons-png.flaticon.com/512/270/270781.png" class="payment-icon" alt="Cash">
+          <img src="money.png" class="payment-icon" alt="Cash">
           <div>Cash on Delivery</div>
         </div>
-        
-        <div class="payment-option" onclick="selectPayment('gcash')">
-          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Gcash_logo.svg/1200px-Gcash_logo.svg.png" class="payment-icon" alt="GCash">
-          <div>GCash</div>
-        </div>
-        
-        <div class="input-group" id="gcash-number-group" style="display: none;">
-          <label class="input-label">GCash Number</label>
-          <input type="text" id="gcash-number" class="checkout-input" placeholder="09XXXXXXXXX">
-        </div>
-      </div>
 
       <div class="order-summary">
         <div class="section-title">Order Summary</div>
@@ -307,7 +296,7 @@
   </div>
 
   <nav class="bottom-nav">
-    <a href="Home.html" class="nav-item">
+    <a href="index.html" class="nav-item">
       <i class="fas fa-home"></i>
       <span>Home</span>
     </a>
@@ -413,19 +402,6 @@
         return;
       }
 
-      if (selectedPayment === "gcash" && !gcashNumber) {
-        Swal.fire({
-          title: "Error",
-          text: "Please enter your GCash number",
-          icon: "error",
-          background: "#000",
-          color: "#fff",
-          showConfirmButton: false,
-          timer: 1500
-        });
-        return;
-      }
-
       const orderData = {
         userId: user.uid,
         shipping: { fullName, address, contactNumber },
@@ -451,7 +427,7 @@
         });
 
         localStorage.removeItem("cart");
-        setTimeout(() => window.location.href = "Home.html", 1500);
+        setTimeout(() => window.location.href = "index.html", 1500);
         
       } catch (error) {
         console.error("Error placing order:", error);
