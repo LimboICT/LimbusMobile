@@ -238,6 +238,11 @@
     </div>
 
     <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      document.addEventListener('gesturestart', function(e) {
+        e.preventDefault();
+      }); 
+        
         const cart = JSON.parse(localStorage.getItem("cart")) || [];
         let itemToRemoveIndex = null;
 
