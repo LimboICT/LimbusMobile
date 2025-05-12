@@ -342,15 +342,10 @@
         if (user) {
           loginBtn.style.display = 'none';
           signupBtn.style.display = 'none';
-          logoutBtn.style.display = 'block';
-          userWelcome.style.display = 'block';
-          userWelcome.innerText = `Welcome back, ${user.displayName || 'User'}`;
           accountBtn.querySelector('span').textContent = user.displayName || 'Account';
         } else {
           loginBtn.style.display = 'block';
           signupBtn.style.display = 'block';
-          logoutBtn.style.display = 'none';
-          userWelcome.style.display = 'none';
           accountBtn.querySelector('span').textContent = 'Account';
         }
       });
