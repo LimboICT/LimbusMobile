@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shop | Drift Beyond Style</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+  <header>
+    <button class="menu-btn" onclick="toggleMenu()">
+      <span></span><span></span><span></span>
+    </button>
+    <h1>Shop All</h1>
+    <div class="header-icons">
+      <a href="cart.html"><i class="fas fa-shopping-cart"></i><span class="cart-count">0</span></a>
+    </div>
+  </header>
+
+  <main>
+    <div class="category-tabs">
+      <button class="active" data-category="all">All</button>
+      <button data-category="shirts">Shirts</button>
+      <button data-category="pants">Pants</button>
+      <button data-category="accessories">Accessories</button>
+    </div>
+
+    <div class="products-grid" id="products-container">
+      <!-- Products loaded via JavaScript -->
+    </div>
+  </main>
+
+  <nav>
+    <a href="index.html"><i class="fas fa-home"></i> Home</a>
+    <a href="products.html" class="active"><i class="fas fa-tshirt"></i> Shop</a>
+    <a href="cart.html"><i class="fas fa-shopping-cart"></i> Cart</a>
+    <a href="account.html"><i class="fas fa-user"></i> Account</a>
+  </nav>
+
+  <script type="module" src="js/products.js"></script>
+</body>
+</html>
