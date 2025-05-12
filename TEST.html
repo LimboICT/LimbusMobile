@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Drift Beyond Style</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #0f0f0f;
+      color: white;
+      overflow-x: hidden;
+    }
+    header {
+      padding: 10px 20px;
+      background: #111;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    header input {
+      width: 60%;
+      padding: 8px;
+      border-radius: 5px;
+      border: none;
+    }
+    .category-tabs {
+      display: flex;
+      overflow-x: auto;
+      gap: 10px;
+      padding: 10px 20px;
+      background: #1a1a1a;
+    }
+    .category-tabs button {
+      background: #000;
+      color: white;
+      border: 1px solid #555;
+      border-radius: 20px;
+      padding: 5px 15px;
+      cursor: pointer;
+    }
+    .banner {
+      text-align: center;
+      margin: 10px;
+    }
+    .highlight {
+      padding: 20px;
+    }
+    .highlight h2 {
+      margin-bottom: 10px;
+    }
+    .items {
+      display: flex;
+      overflow-x: auto;
+      gap: 20px;
+    }
+    .item {
+      background: #222;
+      border-radius: 10px;
+      padding: 10px;
+      min-width: 150px;
+      flex: 0 0 auto;
+      text-align: center;
+    }
+    .item img {
+      max-width: 100%;
+      border-radius: 5px;
+    }
+    .coming-soon {
+      background: linear-gradient(to top, #000000, #333);
+      text-align: center;
+      padding: 50px 10px;
+      margin: 20px;
+      border-radius: 10px;
+    }
+    nav {
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      background: #111;
+      display: flex;
+      justify-content: space-around;
+      padding: 10px 0;
+    }
+    nav button {
+      background: none;
+      border: none;
+      color: white;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <button onclick="toggleMenu()">☰</button>
+    <input type="text" placeholder="Search here..." />
+    <button onclick="goToCart()">🛒</button>
+  </header>
+
+  <div class="category-tabs">
+    <button onclick="filterCategory('abyss')">Abyss</button>
+    <button onclick="filterCategory('shirts')">Shirts</button>
+    <button onclick="filterCategory('accessories')">Accessories</button>
+    <button onclick="filterCategory('all')">See All</button>
+  </div>
+
+  <div class="banner">
+    <img src="https://via.placeholder.com/300x150?text=Drift+Beyond+Style" alt="Banner" />
+  </div>
+
+  <div class="highlight">
+    <h2>This Week's Highlight!</h2>
+    <div class="items">
+      <div class="item">
+        <img src="https://via.placeholder.com/100x100?text=Shirt" alt="Sinister Jester Shirt" />
+        <p>Sinister Jester Shirt</p>
+        <strong>₱400</strong>
+      </div>
+      <div class="item">
+        <img src="https://via.placeholder.com/100x100?text=Keychain" alt="Soul Slasher Keychain" />
+        <p>Soul Slasher Keychain</p>
+        <strong>₱30</strong>
+      </div>
+      <div class="item">
+        <img src="https://via.placeholder.com/100x100?text=Pants" alt="Crux Drift Pants" />
+        <p>Crux Drift</p>
+        <strong>₱300</strong>
+      </div>
+    </div>
+  </div>
+
+  <div class="coming-soon">
+    <h2>Coming Soon</h2>
+  </div>
+
+  <nav>
+    <button onclick="navigate('home')">Home</button>
+    <button onclick="navigate('category')">Category</button>
+    <button onclick="navigate('search')">Search</button>
+    <button onclick="navigate('notifications')">Notification</button>
+    <button onclick="navigate('signout')">Sign Out</button>
+  </nav>
+
+  <script>
+    function toggleMenu() {
+      alert("Menu button clicked");
+    }
+    function goToCart() {
+      alert("Going to cart...");
+    }
+    function filterCategory(cat) {
+      alert("Filtering category: " + cat);
+    }
+    function navigate(page) {
+      alert("Navigating to " + page);
+    }
+  </script>
+
+</body>
+</html>
