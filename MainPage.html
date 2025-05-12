@@ -305,8 +305,7 @@
     document.addEventListener('DOMContentLoaded', function() {
     checkUserAuth();
     handleLogout();
-
-    // Prevent pinch-to-zoom on iOS Safari
+      
     document.addEventListener('gesturestart', function (e) {
       e.preventDefault();
     });
