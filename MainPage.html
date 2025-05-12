@@ -303,9 +303,14 @@
     }
 
     document.addEventListener('DOMContentLoaded', function() {
-      checkUserAuth();
-      handleLogout();
+    checkUserAuth();
+    handleLogout();
+
+    // Prevent pinch-to-zoom on iOS Safari
+    document.addEventListener('gesturestart', function (e) {
+      e.preventDefault();
     });
+  });
   </script>
 </body>
 </html>
