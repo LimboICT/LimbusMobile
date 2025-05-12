@@ -10,7 +10,6 @@ const firebaseConfig = {
   appId: "1:823918375870:web:13db570de493498df33fef"
 };
 
-// Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
@@ -35,3 +34,8 @@ document.getElementById("signup-button").addEventListener("click", () => {
       alert("Error: " + error.message);
     });
 });
+
+document.addEventListener('DOMContentLoaded', function() {
+      document.addEventListener('gesturestart', function(e) {
+        e.preventDefault();
+      }); 
