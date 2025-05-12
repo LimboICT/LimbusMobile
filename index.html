@@ -1,329 +1,387 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Limbus - Drift Beyond Style</title>
-  <link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@400;600&display=swap" rel="stylesheet">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Limbus - Home</title>
+  <link rel="icon" href="limbus.png" type="image/png">
   <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
     body {
-      margin: 0;
-      font-family: 'Urbanist', sans-serif;
-      background-color: #0f0f0f;
-      color: #f0f0f0;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      background-color: #f8f8f8;
+      user-select: none;
       overflow-x: hidden;
-    }
-
-    header, nav {
-      background-color: #111;
-      padding: 12px 20px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    header input {
-      flex: 1;
-      margin: 0 12px;
-      padding: 10px 15px;
-      border-radius: 25px;
-      border: none;
-      outline: none;
-      background-color: #1e1e1e;
-      color: white;
-      font-size: 14px;
-    }
-
-    header button {
-      background-color: #222;
-      border: none;
-      color: white;
-      font-size: 20px;
-      width: 42px;
-      height: 42px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      transition: background-color 0.3s ease, transform 0.2s ease;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.5);
-    }
-
-    header button:hover {
-      background-color: #333;
-      transform: scale(1.05);
-    }
-
-    .category-tabs {
-      display: flex;
-      gap: 10px;
-      overflow-x: auto;
-      padding: 12px 20px;
-      background: #1a1a1a;
-    }
-
-    .category-tabs button {
-      background: #1e1e1e;
-      color: white;
-      border: 1px solid #333;
-      border-radius: 25px;
-      padding: 6px 20px;
-      cursor: pointer;
-      font-size: 14px;
-      transition: background 0.3s ease;
-    }
-
-    .category-tabs button:hover {
-      background: #333;
-    }
-
-    .product-section {
-      padding: 20px;
-    }
-
-    .product-section h2 {
-      margin-bottom: 16px;
-      font-size: 20px;
-    }
-
-    .product-grid {
-      display: flex;
-      gap: 20px;
-      overflow-x: auto;
-      padding-bottom: 10px;
-    }
-
-    .product {
-      background: #1b1b1b;
-      padding: 15px;
-      border-radius: 12px;
-      min-width: 160px;
-      flex: 0 0 auto;
-      text-align: center;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
-      transition: transform 0.2s ease;
-    }
-
-    .product:hover {
-      transform: translateY(-4px);
-    }
-
-    .product img {
-      max-width: 100%;
-      border-radius: 8px;
-      margin-bottom: 10px;
-    }
-
-    .product p {
+      opacity: 0;
+      animation: fadeIn 0.3s ease forwards;
       margin: 0;
-      font-size: 14px;
+      padding: 0;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    @keyframes fadeIn {
+      to {
+        opacity: 1;
+      }
+    }
+
+    .app-container {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+      padding-bottom: 60px; 
+    }
+
+    .app-header {
+      background-color: #000;
+      color: white;
+      padding: 15px;
+      text-align: center;
+      position: relative;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      z-index: 10;
+    }
+
+    .app-title {
+      font-size: 20px;
+      font-weight: 600;
+    }
+
+    .main-content {
+      flex: 1;
+      padding: 15px;
+      overflow-y: auto;
+    }
+
+    .categories {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 15px;
+      margin-top: 10px;
+    }
+
+    .category-card {
+      background: white;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+      transition: transform 0.2s ease;
+      position: relative;
+    }
+
+    .category-card:active {
+      transform: scale(0.98);
+    }
+
+    .image-grid {
+      position: relative;
+      width: 100%;
+      height: 180px;
+    }
+
+    .image-grid img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      position: absolute;
+      opacity: 0;
+      transition: opacity 0.5s ease;
+    }
+
+    .image-grid img.active {
+      opacity: 1;
+    }
+
+    .category-label {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background-color: rgba(0,0,0,0.7);
+      color: white;
+      padding: 15px;
+      font-size: 18px;
       font-weight: 500;
     }
 
-    .product strong {
-      display: block;
-      margin-top: 5px;
-      font-size: 14px;
-      color: #ddd;
-    }
-
-    .coming-soon {
-      text-align: center;
-      background: linear-gradient(to top, #000000, #222);
-      padding: 40px 10px;
-      border-radius: 10px;
-      margin: 20px;
-      font-size: 18px;
-    }
-
-    nav {
+    .bottom-nav {
       position: fixed;
       bottom: 0;
-      width: 100%;
-      justify-content: space-around;
+      left: 0;
+      right: 0;
+      background-color: #000;
       display: flex;
-      background: #111;
+      justify-content: space-around;
       padding: 10px 0;
-      box-shadow: 0 -2px 6px rgba(0,0,0,0.5);
+      box-shadow: 0 -2px 5px rgba(0,0,0,0.1);
+      z-index: 100;
     }
 
-    nav button {
-      background: none;
-      border: none;
+    .nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
       color: white;
-      font-size: 13px;
-      cursor: pointer;
-      padding: 8px 10px;
-      border-radius: 8px;
-      transition: background 0.2s;
+      text-decoration: none;
+      font-size: 12px;
+      padding: 5px 10px;
     }
 
-    nav button:hover {
-      background: #222;
+    .nav-item i {
+      font-size: 22px;
+      margin-bottom: 3px;
     }
 
-    .hidden {
+    .nav-item.active {
+      color: #4CAF50;
+    }
+
+    .auth-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin: 25px 0;
+    }
+
+    .auth-btn {
+      padding: 14px 25px;
+      border-radius: 25px;
+      font-size: 16px;
+      font-weight: 500;
+      text-decoration: none;
+      text-align: center;
+      flex: 1;
+      max-width: 150px;
+    }
+
+    .login-btn {
+      background-color: white;
+      color: black;
+      border: 1px solid #ddd;
+    }
+
+    .signup-btn {
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+    }
+
+    #user-welcome {
+      text-align: center;
+      margin: 15px 0;
+      font-size: 16px;
+      color: #333;
       display: none;
     }
 
-    /* Sliding menu styles */
-    #side-menu {
-      position: fixed;
-      top: 0;
-      left: -250px;
-      width: 220px;
-      height: 100%;
-      background-color: #1a1a1a;
-      box-shadow: 2px 0 8px rgba(0,0,0,0.6);
-      transition: left 0.3s ease;
-      z-index: 1000;
-      padding-top: 60px;
+    .cart-badge {
+      position: absolute;
+      top: -5px;
+      right: -5px;
+      background-color: #FF3B30;
+      color: white;
+      border-radius: 10px;
+      padding: 2px 6px;
+      font-size: 12px;
     }
 
-    #side-menu ul {
-      list-style: none;
-      padding: 0;
-      margin: 0;
+    @media (min-width: 400px) {
+      .categories {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      
+      .image-grid {
+        height: 160px;
+      }
     }
 
-    #side-menu li {
-      padding: 15px 20px;
-      border-bottom: 1px solid #333;
-      color: #f0f0f0;
-      cursor: pointer;
-      transition: background 0.2s ease;
-    }
-
-    #side-menu li:hover {
-      background-color: #333;
-    }
-
-    #side-menu.open {
-      left: 0;
+    @media (min-width: 768px) {
+      .categories {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      
+      .image-grid {
+        height: 200px;
+      }
     }
   </style>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
+  <div class="app-container">
+    <header class="app-header">
+      <div class="app-title">Limbus</div>
+      <div id="user-welcome"></div>
+    </header>
 
-<header>
-  <button onclick="toggleMenu()">☰</button>
-  <input type="text" placeholder="Search here..." />
-  <button onclick="goToCart()">🛒</button>
-</header>
+    <main class="main-content">
+      <div class="categories">
+        <div class="category-card" onclick="location.href='MainPage.html'">
+          <div class="image-grid">
+            <img src="tshirt3img.jpg" alt="" class="category-image active">
+            <img src="tshirt2img.jpg" alt="" class="category-image">
+            <img src="tshirt1img.jpg" alt="" class="category-image">
+            <img src="tshirt2img.jpg" alt="" class="category-image">
+          </div>
+          <div class="category-label">T-Shirts</div>
+        </div>
 
-<!-- Side Menu -->
-<div id="side-menu">
-  <ul>
-    <li onclick="navigate('home')">Home</li>
-    <li onclick="navigate('about')">About</li>
-    <li onclick="navigate('contact')">Contact</li>
-    <li onclick="navigate('logout')">Logout</li>
-  </ul>
-</div>
+        <div class="category-card" onclick="location.href='MainPage2.html'">
+          <div class="image-grid">
+            <img src="pants1img.jpg" alt="" class="category-image active">
+            <img src="pants2img.jpg" alt="" class="category-image">
+            <img src="pants3img.jpg" alt="" class="category-image">
+            <img src="pants2img.jpg" alt="" class="category-image">
+          </div>
+          <div class="category-label">Pants</div>
+        </div>
 
-<div class="category-tabs">
-  <button onclick="showCategory('all')">All</button>
-  <button onclick="showCategory('shirts')">Shirts</button>
-  <button onclick="showCategory('pants')">Pants</button>
-  <button onclick="showCategory('collectibles')">Collectibles</button>
-</div>
+        <div class="category-card" onclick="location.href='MainPage3.html'">
+          <div class="image-grid">
+            <img src="ac5img.jpg" alt="" class="category-image active">
+            <img src="ac4img.jpg" alt="" class="category-image">
+            <img src="ac5img.jpg" alt="" class="category-image">
+            <img src="ac4img.jpg" alt="" class="category-image">
+          </div>
+          <div class="category-label">Accessories</div>
+        </div>
 
-<div class="product-section">
-  <h2 id="category-title">All Products</h2>
-  <div class="product-grid" id="product-grid"></div>
-</div>
+        <div class="category-card" onclick="location.href='MainPage4.html'">
+          <div class="image-grid">
+            <img src="co2img.jpg" alt="" class="category-image active">
+            <img src="co2img.jpg" alt="" class="category-image">
+            <img src="co1img.jpg" alt="" class="category-image">
+            <img src="co3img.jpg" alt="" class="category-image">
+          </div>
+          <div class="category-label">Collectibles</div>
+        </div>
+      </div>
 
-<div class="coming-soon">
-  <h2>Coming Soon</h2>
-</div>
+      <div class="auth-buttons">
+        <a href="Login.html" id="login-btn" class="auth-btn login-btn">Log In</a>
+        <a href="Signup.html" id="signup-btn" class="auth-btn signup-btn">Sign Up</a>
+        <a href="#" id="logout-btn" style="display: none;" class="auth-btn login-btn">Log Out</a>
+      </div>
+    </main>
+  </div>
 
-<nav>
-  <button onclick="navigate('home')">Home</button>
-  <button onclick="navigate('notifications')">Notification</button>
-</nav>
+  <nav class="bottom-nav">
+    <a href="Home.html" class="nav-item active">
+      <i class="fas fa-home"></i>
+      <span>Home</span>
+    </a>
+    <a href="cart.html" class="nav-item">
+      <i class="fas fa-shopping-cart"></i>
+      <span>Cart</span>
+      <span class="cart-badge" id="cart-count">0</span>
+    </a>
+    <a href="Contact.html" class="nav-item">
+      <i class="fas fa-headset"></i>
+      <span>Contact</span>
+    </a>
+    <a href="account.html" class="nav-item" id="account-btn">
+      <i class="fas fa-user"></i>
+      <span>Account</span>
+    </a>
+  </nav>
 
-<script>
-  const products = {
-    all: [
-      { name: 'Sinister Jester Shirt', price: '₱400', category: 'shirts' },
-      { name: 'Crux Drift Shirt', price: '₱300', category: 'shirts' },
-      { name: 'Shirt of Void', price: '₱300', category: 'shirts' },
-      { name: 'Sinister Jester Pants', price: '₱300', category: 'pants' },
-      { name: 'Pants of Void', price: '₱200', category: 'pants' },
-      { name: 'Soul Slasher Keychain', price: '₱30', category: 'collectibles' }
-    ]
-  };
+  <script type="module" src="firebaseAuth.js"></script>
 
-  products.shirts = products.all.filter(p => p.category === 'shirts');
-  products.pants = products.all.filter(p => p.category === 'pants');
-  products.collectibles = products.all.filter(p => p.category === 'collectibles');
-
-  function renderProducts(productList, titleText = 'All Products') {
-    const grid = document.getElementById('product-grid');
-    const title = document.getElementById('category-title');
-    grid.innerHTML = '';
-    title.textContent = titleText;
-
-    if (productList.length === 0) {
-      const msg = document.createElement('div');
-      msg.style.padding = '40px';
-      msg.style.textAlign = 'center';
-      msg.style.fontSize = '16px';
-      msg.style.opacity = '0.7';
-      msg.textContent = 'No results found.';
-      grid.appendChild(msg);
-      return;
-    }
-
-    productList.forEach(product => {
-      const div = document.createElement('div');
-      div.className = 'product';
-      div.innerHTML = `
-        <img src="https://via.placeholder.com/100x100?text=${encodeURIComponent(product.name)}" />
-        <p>${product.name}</p>
-        <strong>${product.price}</strong>
-      `;
-      grid.appendChild(div);
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      document.addEventListener('gesturestart', function(e) {
+        e.preventDefault();
+      });
+      
+      const navItems = document.querySelectorAll('.nav-item');
+      navItems.forEach(item => {
+        item.addEventListener('click', function() {
+          navItems.forEach(nav => nav.classList.remove('active'));
+          this.classList.add('active');
+        });
+      });
+      
+      startImageSlider();
+      checkUserAuth();
+      handleLogout();
     });
-  }
 
-  function showCategory(cat) {
-    renderProducts(products[cat], cat.charAt(0).toUpperCase() + cat.slice(1) + ' Products');
-  }
+    const auth = firebase.auth();
 
-  function toggleMenu() {
-    const menu = document.getElementById('side-menu');
-    menu.classList.toggle('open');
-  }
-
-  function goToCart() {
-    alert("Redirecting to cart...");
-  }
-
-  function navigate(page) {
-    alert("Navigating to " + page);
-  }
-
-  document.querySelector("header input").addEventListener("input", function (e) {
-    const keyword = e.target.value.toLowerCase();
-    const filtered = products.all.filter(product =>
-      product.name.toLowerCase().includes(keyword)
-    );
-
-    const title = keyword ? `Search Results for "${e.target.value}"` : 'All Products';
-    renderProducts(filtered, title);
-  });
-
-  document.addEventListener("click", function (e) {
-    const menu = document.getElementById("side-menu");
-    if (!menu.contains(e.target) && !e.target.closest("header button")) {
-      menu.classList.remove("open");
+    function checkUserAuth() {
+      firebase.auth().onAuthStateChanged((user) => {
+        const loginBtn = document.getElementById('login-btn');
+        const signupBtn = document.getElementById('signup-btn');
+        const logoutBtn = document.getElementById('logout-btn');
+        const userWelcome = document.getElementById('user-welcome');
+        const accountBtn = document.getElementById('account-btn');
+        
+        if (user) {
+          loginBtn.style.display = 'none';
+          signupBtn.style.display = 'none';
+          logoutBtn.style.display = 'block';
+          userWelcome.style.display = 'block';
+          userWelcome.innerText = `Welcome back, ${user.displayName || 'User'}`;
+          accountBtn.querySelector('span').textContent = user.displayName || 'Account';
+        } else {
+          loginBtn.style.display = 'block';
+          signupBtn.style.display = 'block';
+          logoutBtn.style.display = 'none';
+          userWelcome.style.display = 'none';
+          accountBtn.querySelector('span').textContent = 'Account';
+        }
+      });
     }
-  });
 
-  showCategory('all');
-</script>
+    function handleLogout() {
+      const logoutBtn = document.getElementById('logout-btn');
+      if (logoutBtn) {
+        logoutBtn.addEventListener('click', (e) => {
+          e.preventDefault();
+          firebase.auth().signOut().then(() => {
+            location.reload();
+          }).catch((error) => {
+            console.error('Error logging out:', error.message);
+          });
+        });
+      }
+    }
 
+    function startImageSlider() {
+      const categoryImages = document.querySelectorAll('.category-image');
+      
+      setInterval(() => {
+        categoryImages.forEach((image) => {
+          const currentCategory = image.parentElement;
+          const images = currentCategory.querySelectorAll('.category-image');
+          
+          const activeImage = currentCategory.querySelector('.category-image.active');
+          let nextIndex = [...images].indexOf(activeImage) + 1;
+          if (nextIndex === images.length) {
+            nextIndex = 0;
+          }
+
+          images.forEach(img => img.classList.remove('active'));
+          images[nextIndex].classList.add('active');
+        });
+      }, 2000);
+    }
+
+    function updateCartCount() {
+      const cartCount = localStorage.getItem('cartCount') || 0;
+      document.getElementById('cart-count').textContent = cartCount;
+    }
+
+    updateCartCount();
+  </script>
 </body>
 </html>
