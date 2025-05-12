@@ -200,7 +200,6 @@
     <div class="app-container">
         <header class="app-header">
             <div class="app-title">Accessories</div>
-            <div id="user-welcome"></div>
         </header>
 
         <main class="products-container">
@@ -253,7 +252,6 @@
         <div class="auth-buttons">
             <a href="Login.html" id="login-btn" class="auth-btn login-btn">Log In</a>
             <a href="Signup.html" id="signup-btn" class="auth-btn signup-btn">Sign Up</a>
-            <a href="#" id="logout-btn" style="display: none;" class="auth-btn login-btn">Log Out</a>
         </div>
     </div>
 
@@ -285,33 +283,14 @@
             firebase.auth().onAuthStateChanged((user) => {
                 const loginBtn = document.getElementById('login-btn');
                 const signupBtn = document.getElementById('signup-btn');
-                const logoutBtn = document.getElementById('logout-btn');
-                const userWelcome = document.getElementById('user-welcome');
 
                 if (user) {
                     loginBtn.style.display = 'none';
-                    signupBtn.style.display = 'none';
-                    logoutBtn.style.display = 'block';
-                    userWelcome.style.display = 'block';
-                    userWelcome.innerText = `Welcome, ${user.displayName || 'User'}`;
+                    signupBtn.style.display = 'none';;
                 } else {
                     loginBtn.style.display = 'block';
                     signupBtn.style.display = 'block';
-                    logoutBtn.style.display = 'none';
-                    userWelcome.style.display = 'none';
                 }
-            });
-        }
-
-        function handleLogout() {
-            const logoutBtn = document.getElementById('logout-btn');
-            logoutBtn.addEventListener('click', (e) => {
-                e.preventDefault();
-                firebase.auth().signOut().then(() => {
-                    location.reload();
-                }).catch((error) => {
-                    console.error('Error logging out:', error.message);
-                });
             });
         }
 
