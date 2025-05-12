@@ -323,155 +323,89 @@
     </a>
   </nav>
 
-<script>
-  let cart = JSON.parse(localStorage.getItem("cart")) || [];
+  <script>
+    let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
-  // Function to render cart items and update the cart display
-  function renderCart() {
-    const cartContainer = document.getElementById("cart-items-container");
-    const emptyView = document.getElementById("empty-cart-view");
-    const summaryView = document.getElementById("cart-summary");
-    const checkoutBtn = document.getElementById("checkout-btn");
+    function renderCart() {
+      const cartContainer = document.getElementById("cart-items-container");
+      const emptyView = document.getElementById("empty-cart-view");
+      const summaryView = document.getElementById("cart-summary");
+      const checkoutBtn = document.getElementById("checkout-btn");
 
-    // Clear the container first
-    cartContainer.innerHTML = "";
+      cartContainer.innerHTML = "";
+      
+      if (cart.length === 0) {
+        emptyView.style.display = "block";
+        summaryView.style.display = "none";
+        checkoutBtn.disabled = true;
+        return;
+      }
 
-    // If cart is empty, show empty cart view
-    if (cart.length === 0) {
-      emptyView.style.display = "block";
-      summaryView.style.display = "none";
-      checkoutBtn.disabled = true; // Disable checkout if cart is empty
-      return;
+      emptyView.style.display = "none";
+      summaryView.style.display = "block";
+      checkoutBtn.disabled = false;
+
+      let subtotal = 0;
+
+      cart.forEach((item, index) => {
+        const itemTotal = item.price * item.quantity;
+        subtotal += itemTotal;
+
+        const itemElement = document.createElement("div");
+        itemElement.className = "cart-item";
+        itemElement.innerHTML = `
+          <div class="item-header">
+            <img src="${item.image}" alt="${item.name}" class="item-image">
+            <div class="item-details">
+              <div class="item-name">${item.name}</div>
+              <div class="item-price">₱${item.price.toFixed(2)}</div>
+              ${item.color ? `<div class="item-options">Color: ${item.color}</div>` : ''}
+              ${item.size ? `<div class="item-options">Size: ${item.size}</div>` : ''}
+            </div>
+          </div>
+          <div class="item-footer">
+            <div class="quantity-control">
+              <button class="quantity-btn" onclick="updateQuantity(${index}, -1)">−</button>
+              <input type="text" class="quantity-input" value="${item.quantity}" readonly>
+              <button class="quantity-btn" onclick="updateQuantity(${index}, 1)">+</button>
+            </div>
+            <button class="remove-btn" onclick="removeItem(${index})">Remove</button>
+          </div>
+        `;
+        cartContainer.appendChild(itemElement);
+      });
+
+      document.getElementById("subtotal").textContent = `₱${subtotal.toFixed(2)}`;
+      document.getElementById("total-price").textContent = `₱${subtotal.toFixed(2)}`;
     }
 
-    // If cart has items, show summary and enable checkout button
-    emptyView.style.display = "none";
-    summaryView.style.display = "block";
-    checkoutBtn.disabled = false;
+    function updateQuantity(index, change) {
+      const newQuantity = cart[index].quantity + change;
+      if (newQuantity < 1) return;
+      
+      cart[index].quantity = newQuantity;
+      localStorage.setItem("cart", JSON.stringify(cart));
+      renderCart();
+    }
 
-    let subtotal = 0;
+    function removeItem(index) {
+      cart.splice(index, 1);
+      localStorage.setItem("cart", JSON.stringify(cart));
+      renderCart();
+    }
 
-    // Loop through each item in the cart
-    cart.forEach((item, index) => {
-      const itemTotal = item.price * item.quantity; // Calculate item total price
-      subtotal += itemTotal; // Add to subtotal
-
-      // Create a new HTML element for each cart item
-      const itemElement = document.createElement("div");
-      itemElement.className = "cart-item";
-      itemElement.innerHTML = `
-        <div class="item-header">
-          <!-- Change image source based on selected color -->
-          <img src="${getImageForColor(item)}" alt="${item.name}" class="item-image" id="cart-item-img-${index}">
-          <div class="item-details">
-            <div class="item-name">${item.name}</div>
-            <div class="item-price">₱${item.price.toFixed(2)}</div>
-            
-            <!-- Editable Color Selection -->
-            <div class="item-options">
-              Color: 
-              <select class="color-selector" onchange="updateColor(${index}, this.value)">
-                <option value="White" ${item.color === 'White' ? 'selected' : ''}>White</option>
-                <option value="Gray" ${item.color === 'Gray' ? 'selected' : ''}>Gray</option>
-                <option value="Black" ${item.color === 'Black' ? 'selected' : ''}>Black</option>
-                <option value="Red" ${item.color === 'Red' ? 'selected' : ''}>Red</option>
-                <option value="Blue" ${item.color === 'Blue' ? 'selected' : ''}>Blue</option>
-              </select>
-            </div>
-
-            <!-- Editable Size Selection -->
-            <div class="item-options">
-              Size: 
-              <select class="size-selector" onchange="updateSize(${index}, this.value)">
-                <option value="S" ${item.size === 'S' ? 'selected' : ''}>S</option>
-                <option value="M" ${item.size === 'M' ? 'selected' : ''}>M</option>
-                <option value="L" ${item.size === 'L' ? 'selected' : ''}>L</option>
-                <option value="XL" ${item.size === 'XL' ? 'selected' : ''}>XL</option>
-              </select>
-            </div>
-          </div>
-        </div>
-        <div class="item-footer">
-          <div class="quantity-control">
-            <button class="quantity-btn" onclick="updateQuantity(${index}, -1)">−</button>
-            <input type="text" class="quantity-input" value="${item.quantity}" readonly>
-            <button class="quantity-btn" onclick="updateQuantity(${index}, 1)">+</button>
-          </div>
-          <button class="remove-btn" onclick="removeItem(${index})">Remove</button>
-        </div>
-      `;
-      cartContainer.appendChild(itemElement);
+    document.getElementById("checkout-btn").addEventListener("click", function() {
+      window.location.href = "checkout.html";
     });
 
-    // Update subtotal and total price display
-    document.getElementById("subtotal").textContent = `₱${subtotal.toFixed(2)}`;
-    document.getElementById("total-price").textContent = `₱${subtotal.toFixed(2)}`;
-  }
-
-  // Function to get the correct image for the selected color
-  function getImageForColor(item) {
-    const colorImages = {
-      "White": item.imageWhite,
-      "Gray": item.imageGray,
-      "Black": item.imageBlack,
-      "Red": item.imageRed,
-      "Blue": item.imageBlue
-    };
-
-    // Return the image URL for the selected color, or the default image
-    return colorImages[item.color] || item.image;
-  }
-
-  // Function to update the color of an item in the cart
-  function updateColor(index, newColor) {
-    cart[index].color = newColor; // Update color in cart
-    localStorage.setItem("cart", JSON.stringify(cart)); // Save updated cart to localStorage
-    renderCart(); // Re-render the cart
-  }
-
-  // Function to update the size of an item in the cart
-  function updateSize(index, newSize) {
-    cart[index].size = newSize; // Update size in cart
-    localStorage.setItem("cart", JSON.stringify(cart)); // Save updated cart to localStorage
-    renderCart(); // Re-render the cart
-  }
-
-  // Function to update the quantity of an item in the cart
-  function updateQuantity(index, change) {
-    const newQuantity = cart[index].quantity + change;
-
-    // Prevent quantity from going below 1
-    if (newQuantity < 1) return;
-
-    // Update the quantity in the cart
-    cart[index].quantity = newQuantity;
-    localStorage.setItem("cart", JSON.stringify(cart)); // Save updated cart to localStorage
-    renderCart(); // Re-render the cart
-  }
-
-  // Function to remove an item from the cart
-  function removeItem(index) {
-    cart.splice(index, 1); // Remove item at index
-    localStorage.setItem("cart", JSON.stringify(cart)); // Save updated cart to localStorage
-    renderCart(); // Re-render the cart
-  }
-
-  // Event listener for checkout button
-  document.getElementById("checkout-btn").addEventListener("click", function() {
-    window.location.href = "checkout.html"; // Redirect to checkout page
-  });
-
-  // Load cart when page is loaded
-  window.addEventListener("load", renderCart);
-</script>
-
-<script>
-  // Disable pinch-to-zoom gesture on mobile
-  document.addEventListener('gesturestart', function (e) {
-    e.preventDefault();
-  });
-</script>
-
+    window.addEventListener("load", renderCart);
+  </script>
+    
+    <script>
+    document.addEventListener('gesturestart', function (e) {
+      e.preventDefault();
+    });
+  </script>
 
 </body>
 </html>
