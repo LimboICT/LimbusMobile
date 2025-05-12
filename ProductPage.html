@@ -440,12 +440,13 @@
 
       const cartItem = {
         name,
-        price,
+        price: parseFloat(price),
         image: document.getElementById('product-image').src,
         color: hasColor ? selectedColor : null,
         size: hasSize ? selectedSize : null,
-        quantity: selectedQuantity
+        quantity: parseInt(selectedQuantity)
       };
+
 
       const cart = JSON.parse(localStorage.getItem("cart")) || [];
 
