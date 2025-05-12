@@ -223,7 +223,6 @@
           </div>
           <i class="fas fa-chevron-right account-item-arrow"></i>
         </a>
-      </div>
 
       <button class="logout-btn" id="logout-btn">Log Out</button>
     </main>
@@ -280,44 +279,6 @@
         console.error("Logout error:", error);
       });
     });
-
-    document.addEventListener('DOMContentLoaded', function() {
-      const profileData = JSON.parse(localStorage.getItem('profileData')) || {};
-      
-      if (profileData.fullName) {
-        document.getElementById('user-name').textContent = profileData.fullName;
-      }
-      
-      if (profileData.email) {
-        document.getElementById('user-email').textContent = profileData.email;
-      }
-      
-      if (profileData.phone) {
-        document.getElementById('user-phone').textContent = profileData.phone;
-      } else {
-        document.getElementById('user-phone').style.display = 'none';
-      }
-      
-      if (profileData.birthday) {
-        const formattedDate = new Date(profileData.birthday).toLocaleDateString();
-        document.getElementById('user-birthday').textContent = `Birthday: ${formattedDate}`;
-      } else {
-        document.getElementById('user-birthday').style.display = 'none';
-      }
-      
-      if (profileData.profilePic && profileData.profilePic !== 'default-profile.jpg') {
-        document.getElementById('profile-pic').innerHTML = '';
-        const img = document.createElement('img');
-        img.src = profileData.profilePic;
-        img.style.width = '100%';
-        img.style.height = '100%';
-        img.style.borderRadius = '50%';
-        document.getElementById('profile-pic').appendChild(img);
-        document.getElementById('default-profile-icon').style.display = 'none';
-      }
-    });
-
-    document.getElementById('logout-btn').addEventListener('click', function() {
 
     onAuthStateChanged(auth, (user) => {
       if (user) {
