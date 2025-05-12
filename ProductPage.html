@@ -461,14 +461,14 @@
       localStorage.setItem("cart", JSON.stringify(cart));
 
       setTimeout(() => {
-        window.location.href = localStorage.getItem("previousPage") || (editMode ? "cart.html" : "products.html");
+        window.location.href = "index.html";
       }, 2000);
     }
 
     function fadeOutAndGoBack() {
       document.body.style.opacity = 0;
       setTimeout(() => {
-        window.location.href = localStorage.getItem("previousPage") || "index.html";
+        window.location.href = "index.html"; 
       }, 300);
     }
 
