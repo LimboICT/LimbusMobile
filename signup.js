@@ -5,7 +5,6 @@ import {
 } from 'https://www.gstatic.com/firebasejs/11.7.1/firebase-auth.js';
 import { 
   getFirestore, 
-  collection, 
   doc, 
   setDoc 
 } from 'https://www.gstatic.com/firebasejs/11.7.1/firebase-firestore.js';
@@ -55,9 +54,34 @@ document.getElementById("signup-button").addEventListener("click", async () => {
 
     console.log("User created and data saved:", user.uid);
     alert("Sign-up successful!");
-    window.location.href = "Login.html";
+    
+    // Redirect to login page with email as URL parameter
+    window.location.href = `Login.html?email=${encodeURIComponent(email)}`;
   } catch (error) {
     console.error("Sign-up error:", error.message);
-    alert("Error: " + error.message);
+    
+    // More specific error messages
+    let errorMessage = "Sign-up failed: ";
+    switch(error.code) {
+      case 'auth/email-already-in-use':
+        errorMessage += "Email already exists";
+        break;
+      case 'auth/invalid-email':
+        errorMessage += "Invalid email format";
+        break;
+      case 'auth/weak-password':
+        errorMessage += "Password should be at least 6 characters";
+        break;
+      default:
+        errorMessage += error.message;
+    }
+    alert(errorMessage);
+  }
+});
+
+// Handle Enter key submission
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Enter") {
+    document.getElementById("signup-button").click();
   }
 });
