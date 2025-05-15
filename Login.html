@@ -1,122 +1,81 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>Limbus - LogIn</title>
-  <link rel="icon" href="limbus.png" type="image/png" />
-  <style>
-    body {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      background-color: #f0f0f0;
-      font-family: Arial, sans-serif;
-      margin: 0;
-    }
-
-    .login-container {
-      background: white;
-      padding: 30px;
-      border-radius: 10px;
-      box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-      text-align: center;
-      width: 320px;
-    }
-
-    .login-container h2 {
-      margin-bottom: 20px;
-    }
-
-    .login-container input {
-      width: calc(100% - 20px);
-      padding: 10px;
-      margin: 10px 0;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-      display: block;
-      margin-left: auto;
-      margin-right: auto;
-    }
-
-    .password-container {
-      position: relative;
-      width: calc(100% - 20px);
-      margin: 10px auto;
-    }
-
-    .password-container input {
-      width: 100%;
-      padding-right: 40px; /* Space for the eye icon */
-    }
-
-    .toggle-password {
-      position: absolute;
-      right: 10px;
-      top: 50%;
-      transform: translateY(-50%);
-      cursor: pointer;
-      font-size: 18px;
-      color: #777;
-      user-select: none;
-    }
-
-    .login-container button {
-      width: 100%;
-      padding: 10px;
-      background-color: black;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      margin-top: 10px;
-    }
-
-    .login-container .links {
-      margin-top: 15px;
-      display: flex;
-      justify-content: center;
-      gap: 15px;
-    }
-
-    .login-container a {
-      text-decoration: none;
-      color: black;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Limbus - LogIn</title>
+    <link rel="icon" href="limbus.png" type="image/png">
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+            font-family: Arial, sans-serif;
+            margin: 0;
+        }
+        .login-container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 320px;
+        }
+        .login-container h2 {
+            margin-bottom: 20px;
+        }
+        .login-container input {
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .login-container button {
+            width: 100%;
+            padding: 10px;
+            background-color: black;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        .login-container .links {
+            margin-top: 15px;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+        .login-container a {
+            text-decoration: none;
+            color: black;
+        }
+    </style>
 </head>
 <body>
-  <div class="login-container">
-    <h2>Log in</h2>
-    <input type="email" id="email" placeholder="Email" />
-    
-    <div class="password-container">
-      <input type="password" id="password" placeholder="Password" />
-      <span class="toggle-password" id="togglePassword">👁️</span>
+    <div class="login-container">
+        <h2>Log in</h2>
+        <input type="email" id="email" placeholder="Email" />
+        <input type="password" id="password" placeholder="Password" />
+        <button id="login-button">Log In</button>
+        <div class="links">
+            <a href="Signup.html">Sign Up</a>
+        </div>
     </div>
+
+    <script type="module" src="login.js"></script>
+
+    <script>
+      document.addEventListener('gesturestart', function (e) {
+        e.preventDefault();
+      });
+    </script>
     
-    <button id="login-button">Log In</button>
-    <div class="links">
-      <a href="Signup.html">Sign Up</a>
-    </div>
-  </div>
-
-  <script type="module" src="login.js"></script>
-
-  <script>
-    document.addEventListener('gesturestart', function (e) {
-      e.preventDefault();
-    });
-
-    const togglePassword = document.getElementById("togglePassword");
-    const passwordInput = document.getElementById("password");
-
-    togglePassword.addEventListener("click", function () {
-      const type = passwordInput.getAttribute("type") === "password" ? "text" : "password";
-      passwordInput.setAttribute("type", type);
-      this.textContent = type === "password" ? "👁️" : "🙈"; // Optional: switch icon
-    });
-  </script>
 </body>
 </html>
