@@ -56,6 +56,18 @@
             text-decoration: none;
             color: black;
         }
+        .password-wrapper {
+            position: relative;
+        }
+        .toggle-password {
+            position: absolute;
+            top: 50%;
+            right: 15px;
+            transform: translateY(-50%);
+            cursor: pointer;
+            font-size: 14px;
+            user-select: none;
+        }
     </style>
 </head>
 <body>
@@ -75,6 +87,19 @@
       document.addEventListener('gesturestart', function (e) {
         e.preventDefault();
       });
+    </script>
+    <script>
+        function togglePassword() {
+            const passwordInput = document.getElementById('password');
+            const toggleIcon = document.querySelector('.toggle-password');
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                toggleIcon.textContent = '🙈';
+            } else {
+                passwordInput.type = 'password';
+                toggleIcon.textContent = '👁️';
+            }
+        }
     </script>
     
 </body>
