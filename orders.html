@@ -463,9 +463,6 @@
               `).join('')}
               <div class="order-footer">
                 <div class="order-total">Total: ₱${order.total}</div>
-                <div class="order-actions">
-                  <button class="order-btn reorder-btn" onclick="reorder('${doc.id}')">Reorder</button>
-                </div>
               </div>
             `;
             historyOrdersContainer.appendChild(orderCard);
@@ -476,18 +473,14 @@
       });
     }
 
-    function reorder(orderId) {
-      console.log(`Reorder clicked for ${orderId}`);
-    }
-
     onAuthStateChanged(auth, (user) => {
       if (user) {
         loadOrders(user.uid);
       }
     });
 
+    // Make functions available globally
     window.cancelOrder = cancelOrder;
-    window.reorder = reorder;
     window.showTab = showTab;
   </script>
 </body>
