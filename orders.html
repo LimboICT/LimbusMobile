@@ -333,7 +333,7 @@
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
     import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-    import { getFirestore, collection, query, where, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+    import { getFirestore, collection, query, where, onSnapshot, doc, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyAnf_PNL0nJAzcAC-Tozk9ugt8UIykeIu0",
@@ -358,6 +358,19 @@
       
       document.querySelector(`.order-tab[onclick="showTab('${tabId}')"]`).classList.add('active');
       document.getElementById(`${tabId}-orders`).classList.add('active');
+    }
+
+    async function cancelOrder(orderId) {
+      try {
+        const orderRef = doc(db, "orders", orderId);
+        await updateDoc(orderRef, {
+          status: "cancelled"
+        });
+        alert("Order has been cancelled successfully.");
+      } catch (error) {
+        console.error("Error cancelling order: ", error);
+        alert("Failed to cancel order. Please try again.");
+      }
     }
 
     function loadOrders(userId) {
@@ -402,7 +415,6 @@
                 <div class="order-total">Total: ₱${order.total}</div>
                 <div class="order-actions">
                   <button class="order-btn cancel-btn" onclick="cancelOrder('${doc.id}')">Cancel</button>
-                  <button class="order-btn view-btn" onclick="viewOrder('${doc.id}')">View</button>
                 </div>
               </div>
             `;
@@ -453,7 +465,6 @@
                 <div class="order-total">Total: ₱${order.total}</div>
                 <div class="order-actions">
                   <button class="order-btn reorder-btn" onclick="reorder('${doc.id}')">Reorder</button>
-                  <button class="order-btn view-btn" onclick="viewOrder('${doc.id}')">View</button>
                 </div>
               </div>
             `;
@@ -465,14 +476,6 @@
       });
     }
 
-    function cancelOrder(orderId) {
-      console.log(`Cancel order clicked for ${orderId}`);
-    }
-
-    function viewOrder(orderId) {
-      console.log(`View order clicked for ${orderId}`);
-    }
-
     function reorder(orderId) {
       console.log(`Reorder clicked for ${orderId}`);
     }
@@ -482,6 +485,10 @@
         loadOrders(user.uid);
       }
     });
+
+    window.cancelOrder = cancelOrder;
+    window.reorder = reorder;
+    window.showTab = showTab;
   </script>
 </body>
 </html>
